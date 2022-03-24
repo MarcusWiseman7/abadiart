@@ -1,12 +1,15 @@
-*/node_modules
-*/.env
-*/.env.*
-*/!.env.example
-*/.prettierrc
-*/build
+sanity/node_modules
+sanity/.env
+sanity/.env.*
+sanity/!.env.example
+sanity/build
 
-client/.svelte-kit
-client/.DS_Store
-client/package
-
+.svelte-kit
+.DS_Store
+package
 .prettierrc
+/node_modules
+.env
+.env.*
+!.env.example
+/build
