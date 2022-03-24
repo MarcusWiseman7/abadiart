@@ -1,0 +1,12 @@
+*/node_modules
+*/.env
+*/.env.*
+*/!.env.example
+*/.prettierrc
+*/build
+
+client/.svelte-kit
+client/.DS_Store
+client/package
+
+.prettierrc
