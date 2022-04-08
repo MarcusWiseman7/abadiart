@@ -1,5 +1,6 @@
 <script>
     import '../app.css';
+    import AFooter from '$lib/components/AFooter.svelte';
 </script>
 
 <svelte:head>
@@ -12,4 +13,6 @@
     <div class="min-h-max w-full px-3.5 lg:w-2/3 lg:max-w-4xl lg:px-0">
         <slot />
     </div>
+
+    <AFooter />
 </div>

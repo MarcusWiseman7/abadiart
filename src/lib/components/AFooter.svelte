@@ -1,0 +1,67 @@
+<script>
+    import { goto } from '$app/navigation';
+    import { urlFor } from '$lib/image-url';
+    import { logoImage } from '$lib/stores';
+    import SendIcon from '$lib/assets/icons/send.svg';
+
+    const links = [
+        { name: 'About us', href: '/about' },
+        { name: 'Contact', href: '/contact' },
+        { name: 'Press', href: '/press' },
+        { name: 'Work with us', href: '/work' },
+    ];
+
+    $: email = '';
+    const join = () => {
+        console.log('email :>> ', email);
+    };
+</script>
+
+<footer class="w-full bg-stone-100 p-6">
+    <div class="grid gap-6 grid-cols-7">
+        <a href="/" class="h-32 w-32 ml-auto">
+            {#if $logoImage?.image}
+                <img
+                    class=" rounded-full"
+                    src={urlFor($logoImage.image).height(120).width(120).format('webp').url()}
+                    srcset={urlFor($logoImage.image).height(240).width(240).format('webp').url()}
+                    alt="logo"
+                    height="120"
+                    width="120"
+                />
+            {/if}
+        </a>
+
+        <ul class="flex flex-col justify-between">
+            {#each links as link}
+                <li class="cursor-pointer p-1" on:click={() => goto(link.href)}>
+                    {link.name}
+                </li>
+            {/each}
+        </ul>
+
+        <span />
+        <span />
+        <span />
+
+        <div class="flex flex-col justify-center col-span-2">
+            <h4>NEWSLETTER SIGNUP</h4>
+            <div class="block relative mt-1">
+                <input
+                    type="email"
+                    placeholder="Email address..."
+                    class="peer rounded-md w-full placeholder:text-slate-400 placeholder:italic"
+                    bind:value={email}
+                />
+                <button
+                    on:click={join}
+                    class="peer-focus:border-blue-600 peer-focus:border peer-focus:border-l-0 absolute inset-y-0 right-0 bg-orange-700 flex items-center justify-center rounded-r-md"
+                >
+                    <img src={SendIcon} alt="send" height="18" width="18" class="mx-4" />
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-sm text-center">Marcus Wiseman &copy; {new Date().getFullYear()}</div>
+</footer>

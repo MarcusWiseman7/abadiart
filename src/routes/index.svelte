@@ -8,6 +8,6 @@
     <img {src} alt="Under construction" class="max-w-xs lg:max-w-xl" />
 </div> -->
 
-{#each $blogPosts as post}
+<!-- {#each $blogPosts as post}
     <div>{post.title}</div>
-{/each}
+{/each} -->
