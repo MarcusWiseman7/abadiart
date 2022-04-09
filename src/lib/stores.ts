@@ -1,4 +1,4 @@
-import { readable } from 'svelte/store';
+import { readable, writable } from 'svelte/store';
 import sanity from './sanity';
 
 /**
@@ -28,6 +28,7 @@ interface Logo {
 /**
  * WRITABLE EXPORTS
  */
+export let appMessages = writable([]);
 
 /**
  * SANITY FETCH FUNCTIONS

@@ -1,7 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
     import { urlFor } from '$lib/image-url';
-    import { logoImage } from '$lib/stores';
+    import { logoImage, appMessages } from '$lib/stores';
     import SendIcon from '$lib/assets/icons/send.svg';
 
     const links = [
@@ -12,8 +12,25 @@
     ];
 
     $: email = '';
+    $: emailInvalid = false;
+    const checkEmail = () => {
+        emailInvalid = !/^\S+@\S+\.\S+$/.test(email);
+    };
+    const keyup = (e) => {
+        if (emailInvalid) checkEmail();
+        if (e.key === 'Enter') join();
+    };
     const join = () => {
-        console.log('email :>> ', email);
+        checkEmail();
+        if (emailInvalid) return;
+
+        const m = {
+            message: `Welcome, ${email} has been added to our newsletter list!`,
+            timeout: 6000,
+            type: 'success',
+            id: Date.now(),
+        };
+        appMessages.update((a) => [...a, m]);
     };
 </script>
 
@@ -40,11 +57,9 @@
             {/each}
         </ul>
 
-        <span />
-        <span />
-        <span />
+        <span class="col-span-3" />
 
-        <div class="flex flex-col justify-center col-span-2">
+        <div class="flex flex-col justify-center col-span-2 2xl:col-span-1">
             <h4>NEWSLETTER SIGNUP</h4>
             <div class="block relative mt-1">
                 <input
@@ -52,6 +67,7 @@
                     placeholder="Email address..."
                     class="peer rounded-md w-full placeholder:text-slate-400 placeholder:italic"
                     bind:value={email}
+                    on:keyup={keyup}
                 />
                 <button
                     on:click={join}
@@ -59,6 +75,9 @@
                 >
                     <img src={SendIcon} alt="send" height="18" width="18" class="mx-4" />
                 </button>
+                {#if emailInvalid}
+                    <p class="text-xs ml-3 text-red-600 mt-1 absolute left-0 top-full">Please provide a valid email</p>
+                {/if}
             </div>
         </div>
     </div>

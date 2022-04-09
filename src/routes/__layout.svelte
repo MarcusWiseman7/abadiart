@@ -1,6 +1,8 @@
 <script>
     import '../app.css';
     import AFooter from '$lib/components/AFooter.svelte';
+    import Message from '$lib/components/Message.svelte';
+    import { appMessages } from '$lib/stores';
 </script>
 
 <svelte:head>
@@ -15,4 +17,10 @@
     </div>
 
     <AFooter />
+
+    {#if $appMessages?.length}
+        {#each $appMessages as messageObj}
+            <Message {messageObj} />
+        {/each}
+    {/if}
 </div>
