@@ -5,14 +5,14 @@ import sanity from './sanity';
  * INTERFACES
  */
 interface Posts {
-    title: String;
-    slug: String;
+    title: string;
+    slug: string;
     author: {
-        name: String;
+        name: string;
         image: {};
     };
-    mainImage: {};
-    categories: [
+    mainImage?: {};
+    categories?: [
         {
             category: {};
         }
@@ -23,6 +23,13 @@ interface Posts {
 
 interface Logo {
     image: {};
+};
+
+interface PageContent {
+    title?: string;
+    description?: string;
+    keywords?: [string];
+    content?: [];
 };
 
 /**
@@ -45,6 +52,13 @@ const getLogo = async (): Promise<Logo> => {
     else return null;
 };
 
+const getPageContent = async (title: string): Promise<PageContent> => {
+    const pageQuery = `*[_type == 'pages' && slug.current == '${title}']`;
+    const res = await sanity.fetch(pageQuery);
+    if (res && res[0]) return res[0];
+    else return null;
+};
+
 /**
  * READABLE EXPORTS
  */
@@ -54,6 +68,10 @@ export const blogPosts = readable(null, set => {
 
 export const logoImage = readable(null, set => {
     getLogo().then(set).catch(err => console.error(err));
+});
+
+export const aboutContent = readable(null, set => {
+    getPageContent('about').then(set).catch(err => console.error(err));
 });
 
 /**

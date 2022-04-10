@@ -34,8 +34,8 @@
     };
 </script>
 
-<footer class="w-full bg-stone-100 p-6">
-    <div class="grid gap-6 grid-cols-7">
+<footer class="w-full bg-stone-100 p-4 lg:p-6">
+    <div class="grid gap-6 grid-cols-2 lg:grid-cols-7">
         <a href="/" class="h-32 w-32 ml-auto">
             {#if $logoImage?.image}
                 <img
@@ -49,15 +49,13 @@
             {/if}
         </a>
 
-        <ul class="flex flex-col justify-between">
+        <ul class="flex flex-col justify-between lg:col-span-4">
             {#each links as link}
                 <li class="cursor-pointer p-1" on:click={() => goto(link.href)}>
                     {link.name}
                 </li>
             {/each}
         </ul>
-
-        <span class="col-span-3" />
 
         <div class="flex flex-col justify-center col-span-2 2xl:col-span-1">
             <h4>NEWSLETTER SIGNUP</h4>
@@ -76,11 +74,13 @@
                     <img src={SendIcon} alt="send" height="18" width="18" class="mx-4" />
                 </button>
                 {#if emailInvalid}
-                    <p class="text-xs ml-3 text-red-600 mt-1 absolute left-0 top-full">Please provide a valid email</p>
+                    <p class="text-xs ml-3 text-red-600 lg:mt-1 absolute left-0 top-full">
+                        Please provide a valid email
+                    </p>
                 {/if}
             </div>
         </div>
     </div>
 
-    <div class="text-sm text-center">Marcus Wiseman &copy; {new Date().getFullYear()}</div>
+    <div class="text-sm text-center mt-4 lg:mt-0">Marcus Wiseman &copy; {new Date().getFullYear()}</div>
 </footer>
