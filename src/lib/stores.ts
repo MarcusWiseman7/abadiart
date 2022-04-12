@@ -1,5 +1,8 @@
-import { readable, writable } from 'svelte/store';
+import type { SanityDocument, SanityImageAssetDocument } from '@sanity/client';
+import { derived, readable, writable } from 'svelte/store';
 import sanity from './sanity';
+
+const locale = 'en';
 
 /**
  * INTERFACES
@@ -22,14 +25,16 @@ interface Posts {
 };
 
 interface Logo {
-    image: {};
+    image: SanityImageAssetDocument;
 };
 
-interface PageContent {
-    title?: string;
-    description?: string;
-    keywords?: [string];
-    content?: [];
+interface NavList {
+    navList: [
+        {
+            name: string;
+            href: string;
+        }
+    ];
 };
 
 /**
@@ -46,16 +51,34 @@ const getBlogPosts = async (): Promise<[Posts]> => {
 };
 
 const getLogo = async (): Promise<Logo> => {
-    const logoQuery = `*[_type == 'logo']`;
+    const logoQuery = `*[_type == 'logo'][0]`;
     const res = await sanity.fetch(logoQuery);
-    if (res && res[0]) return res[0];
+    if (res) return res;
     else return null;
 };
 
-const getPageContent = async (title: string): Promise<PageContent> => {
-    const pageQuery = `*[_type == 'pages' && slug.current == '${title}']`;
-    const res = await sanity.fetch(pageQuery);
-    if (res && res[0]) return res[0];
+const getNav = async (): Promise<NavList> => {
+    const navQuery = `*[_type == 'nav'] {
+        "navList": navList[] {
+                href,
+                "name": name.${locale},
+            },
+    }[0]`;
+    const res = await sanity.fetch(navQuery);
+    if (res?.hasOwnProperty('navList')) return res.navList;
+    else return null;
+};
+
+const getAboutContent = async (): Promise<SanityDocument> => {
+    const aboutQuery = `*[_type == 'about'] {
+        "title": title.${locale},
+        "bio": bio.${locale},
+        images,
+        description,
+        keywords,
+    }[0]`;
+    const res = await sanity.fetch(aboutQuery);
+    if (res) return res;
     else return null;
 };
 
@@ -71,9 +94,19 @@ export const logoImage = readable(null, set => {
 });
 
 export const aboutContent = readable(null, set => {
-    getPageContent('about').then(set).catch(err => console.error(err));
+    getAboutContent().then(set).catch(err => console.error(err));
+});
+
+export const nav = readable(null, set => {
+    getNav().then(set).catch(err => console.error(err));
 });
 
 /**
  * DERIVED EXPORTS
  */
+export const titleList = derived(aboutContent, ($aboutContent) => {
+    const obj = {};
+
+    if ($aboutContent?.title) obj['/about'] = $aboutContent.title;
+    return obj;
+});

@@ -1,15 +1,8 @@
 <script>
     import { goto } from '$app/navigation';
-    import { urlFor } from '$lib/image-url';
-    import { logoImage, appMessages } from '$lib/stores';
+    import { logoImage, appMessages, nav } from '$lib/stores';
     import SendIcon from '$lib/assets/icons/send.svg';
-
-    const links = [
-        { name: 'About us', href: '/about' },
-        { name: 'Contact', href: '/contact' },
-        { name: 'Press', href: '/press' },
-        { name: 'Work with us', href: '/work' },
-    ];
+    import AImage from './AImage.svelte';
 
     $: email = '';
     $: emailInvalid = false;
@@ -38,23 +31,18 @@
     <div class="grid gap-6 grid-cols-2 lg:grid-cols-7">
         <a href="/" class="h-32 w-32 ml-auto">
             {#if $logoImage?.image}
-                <img
-                    class=" rounded-full"
-                    src={urlFor($logoImage.image).height(120).width(120).format('webp').url()}
-                    srcset={urlFor($logoImage.image).height(240).width(240).format('webp').url()}
-                    alt="logo"
-                    height="120"
-                    width="120"
-                />
+                <AImage image={$logoImage.image} height={120} width={120} alt="logo" addClass="rounded-full" />
             {/if}
         </a>
 
         <ul class="flex flex-col justify-between lg:col-span-4">
-            {#each links as link}
-                <li class="cursor-pointer p-1" on:click={() => goto(link.href)}>
-                    {link.name}
-                </li>
-            {/each}
+            {#if $nav?.length}
+                {#each $nav as link}
+                    <li class="cursor-pointer p-1" on:click={() => goto(link.href)}>
+                        {link.name}
+                    </li>
+                {/each}
+            {/if}
         </ul>
 
         <div class="flex flex-col justify-center col-span-2 2xl:col-span-1">

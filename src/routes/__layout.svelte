@@ -2,11 +2,16 @@
     import '../app.css';
     import AFooter from '$lib/components/AFooter.svelte';
     import Message from '$lib/components/Message.svelte';
-    import { appMessages } from '$lib/stores';
+    import { appMessages, titleList } from '$lib/stores';
+    import { page } from '$app/stores';
+
+    $: title = $titleList.hasOwnProperty($page.url.pathname)
+        ? `AbadiArt | ${$titleList[$page.url.pathname]}`
+        : 'AbadiArt';
 </script>
 
 <svelte:head>
-    <title>AbadiArt</title>
+    <title>{title}</title>
 </svelte:head>
 
 <div
