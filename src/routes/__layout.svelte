@@ -5,6 +5,7 @@
     import { appMessages, aboutContent, contactContent, workContent, pressContent, locale } from '$lib/stores';
     import { page } from '$app/stores';
     import { localeString } from '$lib/helpers';
+    import { onMount } from 'svelte';
 
     $: pathname = $page.url.pathname;
     $: pageInfo = {
@@ -14,10 +15,24 @@
         '/work': $workContent,
     };
 
+    const getLocale = (): void => {
+        const possibleLocales = ['en', 'es'];
+        const localeFromNavigator =
+            window.navigator.languages && window.navigator.languages[0]
+                ? window.navigator.languages[0]
+                : window.navigator.language;
+        const cutLocale = localeFromNavigator.slice(0, 2);
+        const useableLocale = possibleLocales.includes(cutLocale) ? cutLocale : 'en';
+
+        locale.set(useableLocale);
+    };
+
     // SEO HEAD ITEMS
     $: title = pageInfo[pathname]?.title ? `AbadiArt | ${localeString(pageInfo[pathname].title, $locale)}` : 'AbadiArt';
     $: description = pageInfo[pathname]?.description || '';
     $: keywords = pageInfo[pathname]?.keywords || [];
+
+    onMount(getLocale);
 </script>
 
 <svelte:head>
