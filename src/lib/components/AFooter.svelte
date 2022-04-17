@@ -1,8 +1,9 @@
 <script>
     import { goto } from '$app/navigation';
-    import { logoImage, appMessages, nav } from '$lib/stores';
+    import { logoImage, appMessages, nav, locale } from '$lib/stores';
     import SendIcon from '$lib/assets/icons/send.svg';
     import AImage from './AImage.svelte';
+    import { localeString } from '$lib/helpers';
 
     $: email = '';
     $: emailInvalid = false;
@@ -39,7 +40,7 @@
             {#if $nav?.length}
                 {#each $nav as link}
                     <li class="cursor-pointer p-1" on:click={() => goto(link.href)}>
-                        {link.name}
+                        {localeString(link.name, $locale)}
                     </li>
                 {/each}
             {/if}

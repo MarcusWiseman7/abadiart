@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     export let blocks;
 
     import PortableText from '@portabletext/svelte';
