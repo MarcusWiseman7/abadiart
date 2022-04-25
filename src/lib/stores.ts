@@ -73,6 +73,7 @@ export const contactContent = readable(null, set => {
 export const pressContent = readable(null, set => {
     getPageContent('press').then(set).catch(err => console.error(err));
 });
+
 export const workContent = readable(null, set => {
     getPageContent('work').then(set).catch(err => console.error(err));
 });
