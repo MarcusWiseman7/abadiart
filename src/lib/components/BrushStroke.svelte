@@ -77,9 +77,9 @@
     }
 
     /* applying example animation (indefinite variant) */
-    .brush-wrap.brush-wrap--indefinite:before {
-        clip-path: url(#clip-indefinite);
-    }
+    // .brush-wrap.brush-wrap--indefinite:before {
+    //     clip-path: url(#clip-indefinite);
+    // }
 
     /* clipping/animating object (pseudo element) */
     .brush-wrap:before {
