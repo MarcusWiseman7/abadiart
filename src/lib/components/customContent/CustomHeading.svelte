@@ -11,41 +11,11 @@
 </script>
 
 <!-- If preceded by heading, have a higher margin top -->
-<div class="custom-heading {precededByHeading ? 'preceded-by-heading' : ''}" id={anchorId}>
+<div class="about-heading {precededByHeading ? 'preceded-by-heading' : ''}" id={anchorId}>
     <svelte:element this={style} class={style}><slot /></svelte:element>
 </div>
 
 <style lang="scss">
-    .custom-heading {
-        position: relative;
-        padding-top: 30px;
-        clear: both;
-
-        .h1 {
-            font-size: 36px;
-            line-height: 40px;
-            font-weight: 600;
-        }
-
-        .h2 {
-            font-size: 30px;
-            line-height: 36px;
-            font-weight: 600;
-        }
-
-        .h3 {
-            font-size: 20px;
-            line-height: 28px;
-            font-weight: 600;
-        }
-
-        .h4 {
-            font-size: 22px;
-            line-height: 30px;
-            font-weight: 600;
-        }
-    }
-
     .preceded-by-heading {
         margin-top: 20px;
     }

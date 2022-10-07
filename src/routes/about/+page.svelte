@@ -13,7 +13,7 @@
 
 {#if $aboutContent?.contentBlocks}
     {#each $aboutContent.contentBlocks as block}
-        <div class="content">
+        <div class="about-content-block">
             <CustomPortableText value={block.blockContent[$locale]} />
         </div>
     {/each}
