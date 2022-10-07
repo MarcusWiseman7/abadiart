@@ -7,22 +7,12 @@
     $: style = portableText.value.style;
 
     $: precededByHeading = ['h1', 'h2', 'h3', 'h4', 'h5'].includes(blocks[indexInParent - 1]?.style);
-
     $: anchorId = `heading-${value._key}`;
 </script>
 
 <!-- If preceded by heading, have a higher margin top -->
 <div class="custom-heading {precededByHeading ? 'preceded-by-heading' : ''}" id={anchorId}>
     <svelte:element this={style} class={style}><slot /></svelte:element>
-    <!-- {#if style === 'h1'}
-        <h1><slot /></h1>
-    {:else if style === 'h2'}
-        <h2><slot /></h2>
-    {:else if style === 'h3'}
-        <h3><slot /></h3>
-    {:else}
-        <h4><slot /></h4>
-    {/if} -->
 </div>
 
 <style lang="scss">

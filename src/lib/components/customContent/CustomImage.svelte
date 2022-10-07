@@ -1,19 +1,26 @@
 <script lang="ts">
     import type { BlockComponentProps } from '@portabletext/svelte';
+    import { onMount } from 'svelte';
     export let portableText: BlockComponentProps;
 
-    import AImage from '../AImage.svelte';
-
-    $: ({ value, global } = portableText);
-    $: images = global.ptBlocks.filter((block) => block._type === 'mainImage');
-    $: imageIndex = images.findIndex((x) => x._key === value._key);
-    $: evenImage = imageIndex % 2 === 0;
-
+    import AImage from '$lib/components/AImage.svelte';
+    $: ({ value } = portableText);
     $: anchorId = `image-${value._key}`;
+
+    let evenImage = false;
+
+    const getPosition = (): void => {
+        const imagesInDOM = document.querySelectorAll('.image-query-class');
+        imagesInDOM.forEach((image, index) => {
+            if (image.id === anchorId) evenImage = index % 2 === 0;
+        });
+    };
+
+    onMount(getPosition);
 </script>
 
-<div class={`image ${evenImage ? 'float-left' : 'float-right'}`} id={anchorId}>
-    <AImage image={value.asset} alt={value.alt} height={400} addClass="rounded--m" />
+<div class={`image image-query-class ${evenImage ? 'float-left' : 'float-right'}`} id={anchorId}>
+    <AImage image={value.asset} alt={value.alt} height={400} addClass="rounded--m max-w-450 max-h-400" />
     {#if value.caption}
         <span class="caption">{value.caption}</span>
     {/if}

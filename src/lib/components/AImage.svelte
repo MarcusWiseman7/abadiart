@@ -61,4 +61,11 @@
             border-radius: 8px;
         }
     }
+
+    .max-w-450 {
+        max-width: 450px;
+    }
+    .max-h-400 {
+        max-height: 400px;
+    }
 </style>

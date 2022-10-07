@@ -3,7 +3,7 @@
     export let portableText: BlockComponentProps;
 
     $: ({ value } = portableText);
-    $: anchorId = `heading-${value._key}`;
+    $: anchorId = `paragraph-${value._key}`;
 </script>
 
 <p class="custom-paragraph" id={anchorId}>

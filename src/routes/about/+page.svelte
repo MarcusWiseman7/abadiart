@@ -11,8 +11,10 @@
     </BrushStroke>
 {/if}
 
-{#if $aboutContent?.bio && $aboutContent.bio[$locale]}
-    <div class="content">
-        <CustomPortableText value={$aboutContent.bio[$locale]} />
-    </div>
+{#if $aboutContent?.contentBlocks}
+    {#each $aboutContent.contentBlocks as block}
+        <div class="content">
+            <CustomPortableText value={block.blockContent[$locale]} />
+        </div>
+    {/each}
 {/if}
