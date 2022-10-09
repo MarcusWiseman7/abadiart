@@ -1,18 +1,14 @@
 .about-content-block {
-    .about-image-wrapper {
-        @media (min-width: 600px) {
+    @media (min-width: 600px) {
+        .about-image-wrapper {
             float: right;
             margin-left: 20px;
         }
-    }
-
-    &:nth-of-type(even) {
-        .about-image-wrapper {
-            @media (min-width: 600px) {
-                &:nth-of-type(even) {
-                    float: left;
-                    margin-right: 20px;
-                }
+    
+        &:nth-of-type(even) {
+            .about-image-wrapper {
+                float: left;
+                margin-right: 20px;
             }
         }
     }
@@ -63,6 +59,7 @@
     position: relative;
     font-size: 18px;
     letter-spacing: 1.05px;
+    text-align: justify;
 }
 
 .about-image-wrapper {
@@ -71,10 +68,15 @@
     align-items: center;
     width: fit-content;
 
+    @media (min-width: 600px) {
+        max-width: 450px;
+    }
+
     .caption {
         font-size: 14px;
         color: gray;
         font-style: italic;
         font-weight: 600;
+        white-space: pre-wrap;
     }
 }

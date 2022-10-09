@@ -17,9 +17,9 @@ export interface Posts {
     body: [];
 };
 
-export interface IAbout extends SanityDocument {
-    bio?: [];
+export interface IPageData extends SanityDocument {
     title?: { en?: string; es?: string; };
+    description?: { en?: string; es?: string; };
 }
 
 export interface Logo {

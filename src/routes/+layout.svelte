@@ -3,53 +3,23 @@
 
     import AFooter from '$lib/components/AFooter.svelte';
     import Message from '$lib/components/Message.svelte';
-    import { appMessages, aboutContent, contactContent, workContent, pressContent, locale } from '$lib/stores';
-    import { page } from '$app/stores';
-    import { localeString } from '$lib/helpers';
-    import { onMount } from 'svelte';
+    import { appMessages, locale } from '$lib/stores';
 
-    $: pathname = $page.url.pathname;
-    $: pageInfo = {
-        '/about': $aboutContent,
-        '/contact': $contactContent,
-        '/press': $pressContent,
-        '/work': $workContent,
+    const setLanguage = (lang: string): void => {
+        locale.set(lang);
     };
-
-    const getLocale = (): void => {
-        const possibleLocales = ['en', 'es'];
-        const localeFromNavigator =
-            window.navigator.languages && window.navigator.languages[0]
-                ? window.navigator.languages[0]
-                : window.navigator.language;
-        const cutLocale = localeFromNavigator.slice(0, 2);
-        const useableLocale = possibleLocales.includes(cutLocale) ? cutLocale : 'en';
-
-        locale.set(useableLocale);
-    };
-
-    // SEO HEAD ITEMS
-    $: title = pageInfo[pathname]?.title ? `AbadiArt | ${localeString(pageInfo[pathname].title, $locale)}` : 'AbadiArt';
-    $: description = pageInfo[pathname]?.description || '';
-    $: keywords = pageInfo[pathname]?.keywords || [];
-
-    onMount(getLocale);
 </script>
 
-<svelte:head>
-    <title>{title}</title>
-    <meta property="og:title" content={title} />
-    <meta property="og:url" content={'https://abadiart' + pathname} />
-    {#if description}
-        <meta name="description" content={description} />
-        <meta property="og:description" content={description} />
-    {/if}
-    {#if keywords?.length}
-        <meta name="keywords" content={keywords} />
-    {/if}
-</svelte:head>
-
 <div class="layout">
+    <div class="languages">
+        <span class={'language' + $locale === 'es' ? ' language--active' : ''} on:click={() => setLanguage('es')}
+            >ES</span
+        >
+        <span class={'language' + $locale === 'en' ? ' language--active' : ''} on:click={() => setLanguage('en')}
+            >EN</span
+        >
+    </div>
+
     <div class="page">
         <slot />
     </div>
@@ -83,6 +53,22 @@
             width: 66.666667%;
             max-width: 896px;
             padding: 0;
+        }
+    }
+
+    .languages {
+        display: flex;
+        gap: 8px;
+        position: fixed;
+        top: 40px;
+        right: 40px;
+
+        &.language {
+            cursor: pointer;
+
+            .active {
+                color: pink;
+            }
         }
     }
 </style>
