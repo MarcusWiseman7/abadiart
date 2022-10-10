@@ -22,6 +22,13 @@ export interface IPageData extends SanityDocument {
     description?: { en?: string; es?: string; };
 }
 
+export interface IMessage {
+    message: string;
+    timeout: number;
+    type: string;
+    id: number;
+}
+
 export interface Logo {
     image: SanityImageAssetDocument;
 };

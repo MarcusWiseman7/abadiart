@@ -4,18 +4,14 @@
     import AFooter from '$lib/components/AFooter.svelte';
     import Message from '$lib/components/Message.svelte';
     import { appMessages, locale } from '$lib/stores';
-
-    const setLanguage = (lang: string): void => {
-        locale.set(lang);
-    };
 </script>
 
 <div class="layout">
     <div class="languages">
-        <span class={'language' + $locale === 'es' ? ' language--active' : ''} on:click={() => setLanguage('es')}
+        <span class={'language' + ($locale === 'es' ? ' language--active' : '')} on:click={() => locale.set('es')}
             >ES</span
         >
-        <span class={'language' + $locale === 'en' ? ' language--active' : ''} on:click={() => setLanguage('en')}
+        <span class={'language' + ($locale === 'en' ? ' language--active' : '')} on:click={() => locale.set('en')}
             >EN</span
         >
     </div>
@@ -57,17 +53,22 @@
     }
 
     .languages {
-        display: flex;
+        display: none;
         gap: 8px;
         position: fixed;
         top: 40px;
         right: 40px;
 
-        &.language {
-            cursor: pointer;
+        @media (min-width: 600px) {
+            display: flex;
+        }
 
-            .active {
-                color: pink;
+        .language {
+            cursor: pointer;
+            color: lightgrey;
+
+            &--active {
+                color: rgb(28, 25, 23);
             }
         }
     }

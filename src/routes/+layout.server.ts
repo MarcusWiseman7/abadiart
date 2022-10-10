@@ -1,7 +1,8 @@
 import { locale } from '$lib/stores';
+import sanity from '$lib/sanity';
 
 /** @type {import('./$types').LayoutServerLoad} */
-export function load({ request }) {
+export async function load({ request }) {
     const siteAcceptedLanguages = ['en', 'es'];
     const parsedHeaderLanguages: { locale: string; q: number }[] = [];
     const headerAcceptedLangs: string = request.headers.get('accept-language');
@@ -23,5 +24,13 @@ export function load({ request }) {
     const i18n = parsedHeaderLanguages[0]?.locale || 'en';
     locale.set(i18n);
 
-  return {};
+    // fetch nav from sanity
+    const navQuery = `*[_type == 'nav'] {navList}[0]`;
+    const navObject = await sanity.fetch(navQuery);
+
+    // fetch logo from sanity
+    const logoQuery = `*[_type == 'logo'][0]`;
+    const logoImageObj = await sanity.fetch(logoQuery);
+
+    return { logoImageObj, navObject };
 }

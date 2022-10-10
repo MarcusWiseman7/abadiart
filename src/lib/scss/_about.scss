@@ -1,15 +1,19 @@
-.about-content-block {
+.about-image-wrapper {
     @media (min-width: 600px) {
-        .about-image-wrapper {
-            float: right;
-            margin-left: 20px;
-        }
+        // .about-image-wrapper {
+            float: left;
+            margin-right: 20px;
+            // float: right;
+            // margin-left: 20px;
+        // }
     
         &:nth-of-type(even) {
-            .about-image-wrapper {
-                float: left;
-                margin-right: 20px;
-            }
+            // .about-image-wrapper {
+                // float: left;
+                // margin-right: 20px;
+            // }
+            float: right;
+            margin-left: 20px;
         }
     }
 }

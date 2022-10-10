@@ -1,30 +1,35 @@
 <script lang="ts">
+    // types
+    import type { IMessage } from '$lib/ts-interfaces';
+
     import { goto } from '$app/navigation';
     import { logoImage, appMessages, nav, locale } from '$lib/stores';
+
+    // components
     import SendIcon from '$lib/assets/icons/send.svg';
     import AImage from './AImage.svelte';
     import { localeString } from '$lib/helpers';
 
     $: email = '';
     $: emailInvalid = false;
-    const checkEmail = () => {
+    const checkEmail = (): void => {
         emailInvalid = !/^\S+@\S+\.\S+$/.test(email);
     };
-    const keyup = (e) => {
+    const keyup = (event: KeyboardEvent): void => {
         if (emailInvalid) checkEmail();
-        if (e.key === 'Enter') join();
+        if (event.key === 'Enter') join();
     };
-    const join = () => {
+    const join = (): void => {
         checkEmail();
         if (emailInvalid) return;
 
-        const m = {
+        const m: IMessage = {
             message: `Welcome, ${email} has been added to our newsletter list!`,
             timeout: 6000,
             type: 'success',
             id: Date.now(),
         };
-        appMessages.update((a) => [...a, m]);
+        appMessages.update((a: IMessage[]) => [...a, m]);
     };
 </script>
 
@@ -47,6 +52,15 @@
                 {/if}
             </ul>
         </nav>
+
+        <div class="languages">
+            <span class={'language' + ($locale === 'es' ? ' language--active' : '')} on:click={() => locale.set('es')}
+                >ES</span
+            >
+            <span class={'language' + ($locale === 'en' ? ' language--active' : '')} on:click={() => locale.set('en')}
+                >EN</span
+            >
+        </div>
 
         <div class="newsletter">
             <h4>NEWSLETTER SIGNUP</h4>
@@ -178,6 +192,27 @@
 
             @media (min-width: 1024px) {
                 margin-top: 0;
+            }
+        }
+
+        .languages {
+            display: flex;
+            gap: 8px;
+            // position: fixed;
+            // top: 40px;
+            // right: 40px;
+
+            @media (min-width: 600px) {
+                display: none;
+            }
+
+            .language {
+                cursor: pointer;
+                color: lightgrey;
+
+                &--active {
+                    color: rgb(28, 25, 23);
+                }
             }
         }
     }
