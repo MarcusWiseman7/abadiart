@@ -19,7 +19,21 @@ export interface Posts {
 
 export interface IPageData extends SanityDocument {
     title?: { en?: string; es?: string; };
-    description?: { en?: string; es?: string; };
+    description?: string;
+}
+
+export interface IContentBlock {
+    _type: string;
+    _key: string;
+    style: string;
+    children?: [{ text?: string; marks: string[] }];
+    asset?: SanityImageAssetDocument;
+    alt?: string;
+    caption?: string;
+}
+export interface IContent {
+    en: IContentBlock[];
+    es: IContentBlock[];
 }
 
 export interface IMessage {

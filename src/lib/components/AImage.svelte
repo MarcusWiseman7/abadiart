@@ -55,4 +55,13 @@
     .round {
         border-radius: 50%;
     }
+
+    .about-image {
+        max-width: calc(100vw - 28px);
+
+        @media (min-width: 600px) {
+            max-width: 450px;
+            max-height: 400px;
+        }
+    }
 </style>

@@ -2,17 +2,16 @@
 	"name": "abadiart",
 	"version": "0.0.1",
 	"private": true,
-    "author": "Marcus Wiseman",
+	"author": "Marcus Wiseman",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-        "start": "PORT=3090 node --experimental-specifier-resolution=node build/index.js",
+		"start": "PORT=3090 node --experimental-specifier-resolution=node build/index.js",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"devDependencies": {
-		"@portabletext/svelte": "^1.0.1",
 		"@sanity/client": "^3.4.1",
 		"@sanity/image-url": "^1.0.1",
 		"@sveltejs/adapter-auto": "next",
