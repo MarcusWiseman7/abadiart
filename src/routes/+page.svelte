@@ -7,11 +7,22 @@
     export let data: IData;
 
     // components
-    import { logoImage } from '$lib/stores';
     import AImage from '$lib/components/AImage.svelte';
     import { localeString } from '$lib/helpers';
 
+    // images
+    import arrowBack from '$lib/assets/icons/arrow-back.svg';
+    import arrowForward from '$lib/assets/icons/arrow-forward.svg';
+
     import { locale } from '$lib/stores';
+    import { onMount } from 'svelte';
+
+    $: images = data?.content;
+    let canHave = false;
+
+    onMount(() => {
+        canHave = true;
+    });
 </script>
 
 <svelte:head>
@@ -20,7 +31,7 @@
         <meta property="og:title" content={localeString(data.title, $locale)} />
     {/if}
 
-    <meta property="og:url" content="https://abadiart.org/about" />
+    <meta property="og:url" content="https://abadiart.org" />
 
     {#if data?.description && typeof data.description === 'string'}
         <meta name="description" content={data.description} />
@@ -29,29 +40,54 @@
 </svelte:head>
 
 <main>
-    <h1>Abadi Art</h1>
-    {#if $logoImage?.image}
-        <AImage image={$logoImage.image} height={300} width={300} alt="logo" addClass="round" />
+    <!-- image slideshow -->
+    {#if images?.length && canHave}
+        <div class="images">
+            {#each images as image}
+                <AImage image={image.asset} alt={image.alt || 'art'} addClass="fullscreen" />
+            {/each}
+
+            <div class="images__arrows">
+                <div class="images__arrows__arrow">
+                    <img src={arrowBack} alt="Back" />
+                </div>
+                <div class="images__arrows__arrow">
+                    <img src={arrowForward} alt="Forward" />
+                </div>
+            </div>
+        </div>
     {/if}
 </main>
 
 <style lang="scss">
     main {
-        height: 100%;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        height: 2000px;
 
-        h1 {
-            font-size: 30px;
-            line-height: 36px;
-            font-weight: 600;
-            margin-bottom: 64px;
+        .images {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-            @media (min-width: 1024px) {
-                font-size: 36px;
-                line-height: 40px;
+            &__arrows {
+                position: absolute;
+                bottom: 40px;
+                right: 40px;
+                display: flex;
+                gap: 10px;
+
+                &__arrow {
+                    cursor: pointer;
+
+                    img {
+                        height: 30px;
+                        color: #fff;
+                    }
+                }
             }
         }
     }

@@ -3,18 +3,12 @@
 
     import AFooter from '$lib/components/AFooter.svelte';
     import Message from '$lib/components/Message.svelte';
-    import { appMessages, locale } from '$lib/stores';
+    import { appMessages } from '$lib/stores';
+    import AHeader from '$lib/components/AHeader.svelte';
 </script>
 
 <div class="layout">
-    <div class="languages">
-        <span class={'language' + ($locale === 'es' ? ' language--active' : '')} on:click={() => locale.set('es')}
-            >ES</span
-        >
-        <span class={'language' + ($locale === 'en' ? ' language--active' : '')} on:click={() => locale.set('en')}
-            >EN</span
-        >
-    </div>
+    <AHeader />
 
     <div class="page">
         <slot />
@@ -49,27 +43,6 @@
             width: 66.666667%;
             max-width: 896px;
             padding: 0;
-        }
-    }
-
-    .languages {
-        display: none;
-        gap: 8px;
-        position: fixed;
-        top: 40px;
-        right: 40px;
-
-        @media (min-width: 600px) {
-            display: flex;
-        }
-
-        .language {
-            cursor: pointer;
-            color: lightgrey;
-
-            &--active {
-                color: rgb(28, 25, 23);
-            }
         }
     }
 </style>

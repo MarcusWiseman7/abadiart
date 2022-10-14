@@ -12,7 +12,6 @@
 {#if image && height && width && alt}
     <img
         class={addClass}
-        style={`max-height: ${height}px; max-width: ${width}px;`}
         src={urlFor(image).height(height).width(width).format('webp').url()}
         srcset={urlFor(image)
             .height(height * 2)
@@ -20,35 +19,29 @@
             .format('webp')
             .url()}
         {alt}
-        {height}
-        {width}
     />
 {:else if image && height && alt}
     <img
         class={addClass}
-        style={`max-height: ${height}px; width: auto;`}
         src={urlFor(image).height(height).format('webp').url()}
         srcset={urlFor(image)
             .height(height * 2)
             .format('webp')
             .url()}
         {alt}
-        {height}
-        width="auto"
     />
 {:else if image && width && alt}
     <img
         class={addClass}
-        style={`height: auto; max-width: ${width}px;`}
         src={urlFor(image).width(width).format('webp').url()}
         srcset={urlFor(image)
             .width(width * 2)
             .format('webp')
             .url()}
         {alt}
-        height="auto"
-        {width}
     />
+{:else if image}
+    <img class="addClass" src={urlFor(image).format('webp').url()} {alt} />
 {/if}
 
 <style lang="scss">
@@ -63,5 +56,11 @@
             max-width: 450px;
             max-height: 400px;
         }
+    }
+
+    .fullscreen {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: cover;
     }
 </style>
