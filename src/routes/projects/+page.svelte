@@ -1,21 +1,13 @@
 <script lang="ts">
     // types
-    import type { IMainImage, IPageData } from '$lib/ts-interfaces';
-    interface IData extends IPageData {
-        content: IMainImage[];
-    }
+    import type { IPageData } from '$lib/ts-interfaces';
+    interface IData extends IPageData {}
 
     /** @type {import('./$types').PageData} */
     export let data: IData;
 
     import { localeString } from '$lib/helpers';
     import { locale } from '$lib/stores';
-
-    // components
-    import SlideShow from '$lib/components/SlideShow.svelte';
-
-    // data
-    $: images = data?.content;
 </script>
 
 <svelte:head>
@@ -24,21 +16,14 @@
         <meta property="og:title" content={localeString(data.title, $locale)} />
     {/if}
 
-    <meta property="og:url" content="https://abadiart.org" />
+    <meta property="og:url" content="https://abadiart.org/projects" />
 
-    {#if data?.description && typeof data.description === 'string'}
+    {#if data?.description}
         <meta name="description" content={data.description} />
         <meta property="og:description" content={data.description} />
     {/if}
 </svelte:head>
 
-<main>
-    <!-- image slideshow -->
-    <SlideShow {images} />
-</main>
-
-<style lang="scss">
-    main {
-        min-height: 100vh;
-    }
-</style>
+{#if data?.title}
+    {localeString(data.title, $locale)}
+{/if}

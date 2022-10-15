@@ -5,6 +5,9 @@
         content: IContent;
     }
 
+    /** @type {import('./$types').PageData} */
+    export let data: IData;
+
     // components
     import BrushStroke from '$lib/components/BrushStroke.svelte';
     import AImage from '$lib/components/AImage.svelte';
@@ -13,8 +16,7 @@
     import { localeString } from '$lib/helpers';
     import { locale } from '$lib/stores';
 
-    /** @type {import('./$types').PageData} */
-    export let data: IData;
+    // data
     $: contentBlocks = ['en', 'es'].includes($locale) && data?.content[$locale as keyof IContent];
 </script>
 

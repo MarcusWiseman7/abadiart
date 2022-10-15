@@ -10,8 +10,11 @@
     import AImage from './AImage.svelte';
     import { localeString } from '$lib/helpers';
 
+    // state
     $: email = '';
     $: emailInvalid = false;
+
+    // methods
     const checkEmail = (): void => {
         emailInvalid = !/^\S+@\S+\.\S+$/.test(email);
     };
@@ -85,6 +88,7 @@
         background-color: rgb(245, 245, 244);
         padding: 16px;
         margin-top: 30px;
+        z-index: 1;
 
         @media (min-width: 1024px) {
             padding: 24px;
