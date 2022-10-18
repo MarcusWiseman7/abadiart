@@ -17,6 +17,7 @@
     import arrowForward from '$lib/assets/icons/arrow-forward.svg';
 
     // data
+    let width = 0;
     let canHave = false;
     let activeSlide = 0;
     let ss_interval: NodeJS.Timer | null = null;
@@ -26,7 +27,7 @@
         ss_interval = setInterval(() => {
             if (activeSlide + 1 < images.length) activeSlide++;
             else activeSlide = 0;
-        }, 4000);
+        }, 6000);
     };
     const stopInterval = (): void => {
         if (ss_interval) clearInterval(ss_interval);
@@ -41,6 +42,7 @@
     };
 
     onMount(() => {
+        width = window.innerWidth;
         canHave = true;
         if (images?.length > 1) startInterval();
     });
@@ -50,8 +52,8 @@
     <div class="slide-show">
         {#each images as image, index}
             {#if index === activeSlide}
-                <div class="slide-show__slide" transition:fade={{ duration: 1000 }}>
-                    <AImage image={image.asset || image.image} alt={image.alt || 'art'} addClass="fullscreen" />
+                <div class="slide-show__slide" transition:fade={{ duration: 1500 }}>
+                    <AImage image={image.asset || image.image} alt={image.alt || 'art'} {width} addClass="fullscreen" />
                 </div>
             {/if}
         {/each}
@@ -82,7 +84,7 @@
             top: 0;
             left: 0;
             width: 100vw;
-            height: 100%;
+            height: fit-content;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -100,7 +102,8 @@
 
                 img {
                     height: 30px;
-                    color: #fff;
+                    -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+                    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
                 }
             }
         }
