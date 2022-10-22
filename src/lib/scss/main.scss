@@ -9,3 +9,15 @@ body {
     min-height: 100vh;
     color: rgb(28, 25, 23);
 }
+
+.page {
+    min-height: max-content;
+    width: 100%;
+    padding: 0 14px 30px;
+
+    @media (min-width: 1024px) {
+        width: 66.666667%;
+        max-width: 896px;
+        padding: 0 0 30px;
+    }
+}

@@ -10,9 +10,7 @@
 <div class="layout">
     <AHeader />
 
-    <div class="page">
-        <slot />
-    </div>
+    <slot />
 
     <AFooter />
 
@@ -32,17 +30,5 @@
         padding-top: 20px;
         width: 100%;
         min-height: 100vh;
-    }
-
-    .page {
-        min-height: max-content;
-        width: 100%;
-        padding: 0 14px;
-
-        @media (min-width: 1024px) {
-            width: 66.666667%;
-            max-width: 896px;
-            padding: 0;
-        }
     }
 </style>

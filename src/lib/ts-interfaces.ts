@@ -48,10 +48,13 @@ export interface IMainImage extends SanityImageAssetDocument {
     caption?: string;
 }
 
+export interface ILocaleString {
+    en: string;
+    es: string;
+    _type?: string;
+}
+
 export interface INav {
-    name: {
-        en: string;
-        es: string;
-    };
+    name: ILocaleString;
     href: string;
 }

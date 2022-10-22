@@ -39,43 +39,49 @@
         {localeString(data.title, $locale)}
     </BrushStroke>
 {/if}
+<div class="page">
+    <!-- content -->
+    {#if contentBlocks}
+        <div class="about-content">
+            {#each contentBlocks as block, index}
+                <!-- heading or paragraph -->
+                {#if block._type === 'text' && block.children}
+                    {#each block.children as item}
+                        <svelte:element
+                            this={item.marks.includes('strong')
+                                ? 'strong'
+                                : block.style === 'normal'
+                                ? 'span'
+                                : block.style}
+                            class={(block.style === 'normal' ? 'about-paragraph ' : 'about-heading ') + block.style}
+                        >
+                            {item.text}
+                        </svelte:element>
+                    {/each}
+                {/if}
 
-<!-- content -->
-{#if contentBlocks}
-    <div class="about-content">
-        {#each contentBlocks as block, index}
-            <!-- heading or paragraph -->
-            {#if block._type === 'text' && block.children}
-                {#each block.children as item}
-                    <svelte:element
-                        this={item.marks.includes('strong')
-                            ? 'strong'
-                            : block.style === 'normal'
-                            ? 'span'
-                            : block.style}
-                        class={(block.style === 'normal' ? 'about-paragraph ' : 'about-heading ') + block.style}
+                <!-- image -->
+                {#if block._type === 'mainImage' && block.asset}
+                    <div
+                        class={`about-image-wrapper float-right ${
+                            contentBlocks[index - 1]?.style === 'normal' ? 'float-left' : ''
+                        }`}
                     >
-                        {item.text}
-                    </svelte:element>
-                {/each}
-            {/if}
-
-            <!-- image -->
-            {#if block._type === 'mainImage' && block.asset}
-                <div
-                    class={`about-image-wrapper float-right ${
-                        contentBlocks[index - 1]?.style === 'normal' ? 'float-left' : ''
-                    }`}
-                >
-                    <AImage image={block.asset} alt={block.alt || 'image'} height={400} addClass="photo about-image" />
-                    {#if block.caption}
-                        <span class="caption">{block.caption}</span>
-                    {/if}
-                </div>
-            {/if}
-        {/each}
-    </div>
-{/if}
+                        <AImage
+                            image={block.asset}
+                            alt={block.alt || 'image'}
+                            height={400}
+                            addClass="photo about-image"
+                        />
+                        {#if block.caption}
+                            <span class="caption">{block.caption}</span>
+                        {/if}
+                    </div>
+                {/if}
+            {/each}
+        </div>
+    {/if}
+</div>
 
 <style lang="scss">
     .about-paragraph {

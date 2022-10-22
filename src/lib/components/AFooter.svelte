@@ -87,7 +87,6 @@
         width: 100%;
         background-color: rgb(245, 245, 244);
         padding: 16px;
-        margin-top: 30px;
         z-index: 1;
 
         @media (min-width: 1024px) {
