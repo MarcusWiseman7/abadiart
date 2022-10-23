@@ -52,7 +52,7 @@
     <div class="slide-show">
         {#each images as image, index}
             {#if index === activeSlide}
-                <div class="slide-show__slide" transition:fade={{ duration: 1500 }}>
+                <div class="slide-show__slide" transition:fade|local={{ duration: 1500 }}>
                     <AImage image={image.asset || image.image} alt={image.alt || 'art'} {width} addClass="fullscreen" />
                 </div>
             {/if}
