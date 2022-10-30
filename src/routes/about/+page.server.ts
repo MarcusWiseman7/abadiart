@@ -1,32 +1,21 @@
-import { parsePortableText } from '$lib/helpers';
-import sanity from '$lib/sanity';
-import type { SanityImageAssetDocument } from '@sanity/client';
+import type { IContent, IPageData } from '$lib/ts-interfaces';
+interface IData extends IPageData {
+    aboutUs: IContent;
+}
 
-interface IContentBlock {
-    _type: string;
-    _key: string;
-    style: string;
-    children?: [{ text?: string; marks: string[] }];
-    asset?: SanityImageAssetDocument;
-    alt?: string;
-    caption?: string;
-}
-interface IContent {
-    en: IContentBlock[];
-    es: IContentBlock[];
-}
+import { getDesktopIContent } from '$lib/helpers';
+import sanity from '$lib/sanity';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({}) {
     const query = `*[_type == 'about'][0]`;
-    const res = await sanity.fetch(query);
+    const res: IData = await sanity.fetch(query);
     
-    if (res) {
-        const { title, description, contentBlocks } = res;
-        const content: IContent = parsePortableText(contentBlocks);
+    if (res?.aboutUs) {
+        const desktopAboutUs = getDesktopIContent(res.aboutUs);
 
-        return { title: { en: title.en, es: title.es }, description, content };
+        return { ...res, desktopAboutUs };
     }
 
-    return {};
+    return res;
 }

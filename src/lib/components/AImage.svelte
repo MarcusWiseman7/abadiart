@@ -49,7 +49,7 @@
         border-radius: 50%;
     }
 
-    .about-image {
+    .content-image {
         max-width: calc(100vw - 28px);
 
         @media (min-width: 600px) {

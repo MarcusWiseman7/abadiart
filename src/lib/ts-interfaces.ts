@@ -30,10 +30,12 @@ export interface IContentBlock {
     asset?: SanityImageAssetDocument;
     alt?: string;
     caption?: string;
+    keepOriginalSize?: boolean;
 }
 export interface IContent {
     en: IContentBlock[];
     es: IContentBlock[];
+    _type?: string;
 }
 
 export interface IMessage {

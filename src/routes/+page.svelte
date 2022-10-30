@@ -6,21 +6,33 @@
             images: IMainImage[];
         };
         missionStatement: IContent;
+        desktopMissionStatement: IContent;
     }
 
     /** @type {import('./$types').PageData} */
     export let data: IData;
 
     // helpers
+    import { onMount } from 'svelte';
     import { localeString } from '$lib/helpers';
     import { locale } from '$lib/stores';
 
     // components
     import SlideShow from '$lib/components/SlideShow.svelte';
+    import ContentBlocks from '$lib/components/ContentBlocks.svelte';
 
     // data
+    let mobile = true;
     $: images = data?.images?.images;
-    $: missionStatement = data?.missionStatement && data.missionStatement[$locale as keyof IContent];
+    $: missionDeviceKey = mobile ? 'missionStatement' : 'desktopMissionStatement';
+    $: missionStatement = data && data[missionDeviceKey] && data[missionDeviceKey][$locale as keyof IContent];
+
+    // methods
+    const setMobile = (): void => {
+        mobile = window.innerWidth < 600;
+    };
+
+    onMount(setMobile);
 </script>
 
 <svelte:head>
@@ -37,6 +49,8 @@
     {/if}
 </svelte:head>
 
+<svelte:window on:resize={setMobile} />
+
 <section>
     <!-- image slideshow -->
     <SlideShow {images} />
@@ -45,25 +59,7 @@
 <main>
     <div class="page">
         {#if missionStatement}
-            <div class="mission-statement">
-                {#each missionStatement as block}
-                    <!-- heading or paragraph -->
-                    {#if block.style && block.children}
-                        {#each block.children as item}
-                            <svelte:element
-                                this={item.marks.includes('strong')
-                                    ? 'strong'
-                                    : block.style === 'normal'
-                                    ? 'span'
-                                    : block.style}
-                                class={block.style}
-                            >
-                                {item.text}
-                            </svelte:element>
-                        {/each}
-                    {/if}
-                {/each}
-            </div>
+            <ContentBlocks contentBlocks={missionStatement} modifiers={['center-headers-mobile']} />
         {/if}
     </div>
 </main>
@@ -79,26 +75,5 @@
         width: 100%;
         display: flex;
         justify-content: center;
-    }
-
-    .mission-statement {
-        letter-spacing: 1px;
-        .h2 {
-            font-size: 28px;
-            margin: 30px 0;
-            font-weight: 600;
-        }
-
-        .h3 {
-            font-size: 22px;
-            margin: 20px 0 -10px 0;
-            font-weight: 600;
-        }
-
-        .h4 {
-            font-size: 22px;
-            margin: 20px 0 8px 0;
-            font-weight: 300;
-        }
     }
 </style>

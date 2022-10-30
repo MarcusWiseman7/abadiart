@@ -4,33 +4,23 @@ export const localeString = (obj: { en?: string, es?: string; }, locale: string)
     return obj[locale as keyof object] || obj.en;
 };
 
-export const parsePortableText = (contentBlocks): IContent => {
-    // parse sanity's portableText
-    const content: IContent = { en: [], es: [] };
-    for (let i = 0, j = contentBlocks.length; i < j; i++) {
-        if (contentBlocks[i].blockContent && contentBlocks[i].blockContent) {
-            const keys = Object.keys(contentBlocks[i].blockContent).splice(1);
+export const getDesktopIContent = (baseVersion: IContent): IContent => {
+    const desktopVersion: IContent = JSON.parse(JSON.stringify(baseVersion));
+        
+    for (const key in desktopVersion) {
+        const arr = desktopVersion[key as keyof IContent];
 
-            for (let k = 0, l = keys.length; k < l; k++) {
-                const contentItems = contentBlocks[i].blockContent[keys[k]];
-                
-                for (let m = 0, n = contentItems.length; m < n; m++) {
-                    const contentItem = contentItems[m];
-                    if (contentItem._key) {
-                        let block;
-                        
-                        if (contentItem._type === 'mainImage') {
-                            block = contentItem;
-                        } else {
-                            block = { _key: contentItem._key, _type: 'text', style: contentItem.style, children: contentItem.children };
-                        }
-                        
-                        content[keys[k] as keyof IContent].push(block);
-                    }
+        if (['en', 'es'].includes(key) && typeof arr === 'object') {
+            for (let i = 0, j = arr.length; i < j; i++) {
+                if (arr[i]._type === 'mainImage') {
+                    // move up to be under previous heading
+                    let new_index = i - 1;
+                    while (!['h1', 'h2', 'h3', 'h4'].includes(arr[new_index].style) && arr[new_index]._type !== 'mainImage' && new_index >= 0) new_index--;
+                    arr.splice(new_index + 1, 0, arr.splice(i, 1)[0]);
                 }
             }
         }
     }
-    
-    return content;
+
+    return desktopVersion;
 };
