@@ -90,8 +90,9 @@
         top: 0;
         left: 0;
         width: 100vw;
-        height: calc(100vh + env(safe-area-inset-top));
-        padding-top: env(safe-area-inset-top);
+        height: 100%;
+        // height: calc(100vh + env(safe-area-inset-top));
+        // padding-top: env(safe-area-inset-top);
 
         &__slide {
             position: absolute;
