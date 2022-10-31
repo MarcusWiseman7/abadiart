@@ -7,7 +7,6 @@
 
     // directives
     import { onMount } from 'svelte';
-    import { fade } from 'svelte/transition';
 
     // components
     import AImage from '$lib/components/AImage.svelte';
@@ -17,7 +16,7 @@
     import arrowForward from '$lib/assets/icons/arrow-forward.svg';
 
     // data
-    let width = 0;
+    let height = 0;
     let canHave = false;
     let activeSlide = 0;
     let ss_interval: NodeJS.Timer | null = null;
@@ -27,7 +26,7 @@
         ss_interval = setInterval(() => {
             if (activeSlide + 1 < images.length) activeSlide++;
             else activeSlide = 0;
-        }, 6000);
+        }, 7000);
     };
     const stopInterval = (): void => {
         if (ss_interval) clearInterval(ss_interval);
@@ -40,20 +39,34 @@
         if (activeSlide + 1 < images.length) activeSlide++;
         else activeSlide = 0;
     };
+    const getDevice = (): void => {
+        canHave = false;
+        height = window.innerHeight;
+        setTimeout(() => {
+            canHave = true;
+        }, 0);
+    };
 
     onMount(() => {
-        width = window.innerWidth;
-        canHave = true;
+        getDevice();
         if (images?.length > 1) startInterval();
+        canHave = true;
     });
 </script>
+
+<svelte:window on:resize={getDevice} />
 
 {#if images?.length && canHave}
     <div class="slide-show">
         {#each images as image, index}
-            {#if index === activeSlide}
-                <div class="slide-show__slide" transition:fade|local={{ duration: 1500 }}>
-                    <AImage image={image.asset || image.image} alt={image.alt || 'art'} {width} addClass="fullscreen" />
+            {#if image.asset}
+                <div class={`slide-show__slide ${index === activeSlide ? 'slide-show__slide--active' : ''}`}>
+                    <AImage
+                        image={image.asset || image.image}
+                        alt={image.alt || 'art'}
+                        {height}
+                        addClass="fullscreen"
+                    />
                 </div>
             {/if}
         {/each}
@@ -84,10 +97,16 @@
             top: 0;
             left: 0;
             width: 100vw;
-            height: fit-content;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            transition: opacity ease-in-out 2000ms;
+
+            &--active {
+                opacity: 1;
+            }
         }
 
         &__arrows {

@@ -28,12 +28,7 @@
             {:else if block._type === 'mainImage' && block.asset}
                 <!-- image -->
                 <div class="image-wrapper">
-                    <AImage
-                        image={block.asset}
-                        alt={block.alt || 'image'}
-                        height={400}
-                        addClass="photo content-image"
-                    />
+                    <AImage image={block.asset} alt={block.alt || 'image'} width={450} addClass="photo content-image" />
                     {#if block.caption}
                         <span class="caption">{block.caption}</span>
                     {/if}

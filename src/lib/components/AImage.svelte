@@ -45,6 +45,11 @@
 {/if}
 
 <style lang="scss">
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
     .round {
         border-radius: 50%;
     }
@@ -59,8 +64,8 @@
     }
 
     .fullscreen {
-        max-height: 100%;
-        max-width: 100%;
+        height: 100%;
+        width: 100%;
         object-fit: cover;
     }
 </style>
