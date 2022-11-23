@@ -26,16 +26,25 @@ export interface IContentBlock {
     _type: string;
     _key: string;
     style: string;
-    children?: [{ text?: string; marks: string[] }];
+    children?: [{ text?: string; marks: string[], markDefs?: [] }];
     asset?: SanityImageAssetDocument;
     alt?: string;
     caption?: string;
     keepOriginalSize?: boolean;
 }
 export interface IContent {
-    en: IContentBlock[];
-    es: IContentBlock[];
+    en?: IContentBlock[];
+    es?: IContentBlock[];
     _type?: string;
+}
+
+export interface IProject {
+    title: {
+        en?: string;
+        es?: string;
+    };
+    description: IContent;
+    desktopDescription: IContent;
 }
 
 export interface IMessage {

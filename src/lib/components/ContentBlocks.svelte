@@ -1,6 +1,8 @@
 <script lang="ts">
+    // types
     import type { IContentBlock } from '$lib/ts-interfaces';
 
+    // props
     export let contentBlocks: IContentBlock[];
     export let modifiers: string[] = [];
 
@@ -9,26 +11,31 @@
 </script>
 
 {#if contentBlocks}
-    <div class={`content-blocks ${modifiers.map((m) => 'content-blocks--' + m)}`}>
+    <div class={`content-blocks ${modifiers.map((m) => 'content-blocks--' + m).join(' ')}`}>
         {#each contentBlocks as block}
             {#if block.style && block.children}
                 <!-- heading or paragraph -->
-                {#each block.children as item}
+                {#each block.children as child}
                     <svelte:element
-                        this={item.marks.includes('strong')
+                        this={child.marks.includes('strong')
                             ? 'strong'
                             : block.style === 'normal'
                             ? 'span'
                             : block.style}
-                        class={block.style + ' ' + item.marks.map((m) => m)}
+                        class={block.style + ' ' + child.marks.map((m) => m)}
                     >
-                        {item.text}
+                        {child.text}
                     </svelte:element>
                 {/each}
             {:else if block._type === 'mainImage' && block.asset}
                 <!-- image -->
                 <div class="image-wrapper">
-                    <AImage image={block.asset} alt={block.alt || 'image'} width={450} addClass="photo content-image" />
+                    <AImage
+                        image={block.asset}
+                        alt={block.alt || 'image'}
+                        width={450}
+                        addClass={`photo content-image ${modifiers.includes('project') ? 'project' : ''}`}
+                    />
                     {#if block.caption}
                         <span class="caption">{block.caption}</span>
                     {/if}
@@ -131,6 +138,25 @@
                 .h3,
                 .h4 {
                     text-align: left;
+                }
+            }
+        }
+
+        &--project {
+            white-space: pre-wrap;
+            .image-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                margin: 0;
+                padding: 8px 0;
+
+                @media (min-width: 600px) {
+                    max-width: unset;
+                    float: unset;
+                    margin: 0;
+                    padding: 14px 0;
                 }
             }
         }

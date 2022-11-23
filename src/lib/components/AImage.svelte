@@ -68,4 +68,17 @@
         width: 100%;
         object-fit: cover;
     }
+
+    .project {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        object-fit: cover;
+        max-height: 280px;
+        max-width: unset;
+
+        @media (min-width: 600px) {
+            max-height: 600px;
+        }
+    }
 </style>

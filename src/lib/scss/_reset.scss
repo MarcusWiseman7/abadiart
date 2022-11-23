@@ -330,6 +330,11 @@ textarea::placeholder {
     color: #9ca3af;
 }
 
+input:focus-visible,
+textarea:focus-visible {
+    outline: none;
+}
+
 /*
 Set the default cursor for buttons.
 */
