@@ -34,11 +34,15 @@
     .input {
         &__wrapper {
             border: 1px solid #dadce0;
-            padding: 20px 30px 30px;
+            padding: 10px 16px 16px;
             border-radius: 20px;
 
             &--error {
                 border: 1px solid #d93025;
+            }
+
+            @media (min-width: 600px) {
+                padding: 20px 30px 30px;
             }
         }
 
@@ -46,10 +50,14 @@
             display: flex;
             gap: 6px;
             font-size: 18px;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
 
             &__required {
                 color: #d93025;
+            }
+
+            @media (min-width: 600px) {
+                margin-bottom: 20px;
             }
         }
 
