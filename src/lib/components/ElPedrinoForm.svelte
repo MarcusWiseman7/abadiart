@@ -30,44 +30,66 @@
     }
 
     // components
-    import AInput from '$lib/components/AInput.svelte';
-    import mapImage from '$lib/assets/images/map.jpg';
-    import refugioImage from '$lib/assets/images/refugio.jpg';
+    import AInput from "$lib/components/AInput.svelte";
+    import mapImage from "$lib/assets/images/map.jpg";
+    import refugioImage from "$lib/assets/images/refugio.jpg";
+    import { text } from "svelte/internal";
 
     // data
-    const formQuestions: IQuestion[] = [
+    let step = 0;
+    const formQuestionsStep1: IQuestion[] = [
         {
-            id: 'email',
-            label: 'Email address',
-            placeholder: '',
+            id: "email",
+            label: "Email address",
+            placeholder: "",
             required: true,
-            type: 'email',
+            type: "email",
         },
-        { id: 'surname', label: 'Surname', placeholder: 'Surname', required: true },
-        { id: 'name', label: 'Name', placeholder: 'Name', required: true },
+        { id: "surname", label: "Surname", placeholder: "Surname", required: true },
+        { id: "name", label: "Name", placeholder: "Name", required: true },
         {
-            id: 'residence',
-            label: 'Place of residence ( Province, country )',
-            placeholder: 'Murcia, Spain',
+            id: "residence",
+            label: "Place of residence ( Province, country )",
+            placeholder: "Murcia, Spain",
             required: true,
         },
-        { id: 'phone', label: 'Phone number', placeholder: '', required: false },
+        { id: "phone", label: "Phone number", placeholder: "", required: false },
+    ];
+
+    const formQuestionsStep2: IQuestion[] = [
         {
-            id: 'treeName',
+            id: "treeName",
             label: `Give a name to your adopted tree and add your surname if you like?`,
-            placeholder: 'Lovely name',
+            placeholder: "Lovely name",
             required: true,
         },
         {
-            id: 'treeId',
-            label: 'In this map the mandarin trees are marked with a number - Please choose a number which will become your tree and choose a color to mark it on the map',
-            placeholder: 'Tree id number',
+            id: "treeId",
+            label: "In this map the mandarin trees are marked with a number - Please choose a number which will become your tree and choose a color to mark it on the map",
+            placeholder: "Tree id number",
             required: true,
-            type: 'number',
+            type: "number",
             map: true,
         },
-        { id: 'date', label: 'Date of Adoption', placeholder: '', required: true, type: 'date' },
+        { id: "date", label: "Date of Adoption", placeholder: "", required: true, type: "date" },
     ];
+
+    $: stepQuestions = [formQuestionsStep1, formQuestionsStep2][step];
+    $: stepHero = [
+        { title: "El Refugio EcoArt", src: refugioImage, alt: "El refugio" },
+        { title: "Padrin@ Dame Un Nombre" },
+    ][step];
+    $: stepInfo = [
+        { title: "WHO YOU ARE", subtitle: "To identify you on the adoption certificate, and to send it to you." },
+        {
+            title: "Giving the Name and Surname",
+            text: [
+                "After you adopt the tree we will send you an adoption certificate which is valid for one year only, containing beautiful photos of your tree. The certificate will identify you as the Padrin@ of the tree and will include your chosen name for the tree. This fictional kinship aims to connect you with the tree, so you can build up a family relationship between you and your adopted tree.",
+                "This action contributes to promote the ecological thinking and to create a new lineage between trees and people. We will also inform you about events at El Refugio, where you could meet your adopted tree in person!  If the project or photos of your tree spark any memories of experiences about trees and nature in your life then please do tell us. We would be delighted to know.",
+            ],
+        },
+    ][step];
+
     const payload: IPayload = {
         email: null,
         surname: null,
@@ -78,6 +100,7 @@
         treeId: null,
         date: null,
     };
+
     let errors: IErrors = {
         email: false,
         surname: false,
@@ -106,57 +129,89 @@
             checkInput(question);
         }
     };
+
+    const goPrev = (): void => {
+        if (step > 0) {
+            step--;
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "smooth",
+            });
+        }
+    };
+
+    const goNext = (): void => {
+        if (step < 3) {
+            step++;
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "smooth",
+            });
+        }
+    };
 </script>
 
-<form>
+<form on:submit|preventDefault>
     <!-- headline -->
     <section class="centered">
-        <h1>Tree Adoption Application Form</h1>
-        <small>(Information provided for administrative purposes only)</small>
+        <h1>Padrin@ Dame Un Nombre</h1>
+        <h2>Tree Adoption Application Form</h2>
+        <small>(Information provided used for administrative purposes only)</small>
     </section>
 
-    <!-- El refugio -->
+    <!-- step image -->
     <section class="centered">
-        <h3>El Refugio EcoArt</h3>
-        <img src={refugioImage} alt="El refugio" />
+        <h3>{stepHero.title}</h3>
+        {#if stepHero.src && stepHero.alt}
+            <img src={stepHero.src} alt={stepHero.alt} />
+        {/if}
     </section>
 
-    <!-- form info -->
+    <!-- step info -->
     <section>
-        <h3>WHO YOU ARE</h3>
-        <p>To identify you on the adoption certificate, and to send it to you.</p>
+        <h3>{stepInfo.title}</h3>
+        {#if stepInfo.subtitle}
+            <p>{stepInfo.subtitle}</p>
+        {/if}
+        {#if stepInfo.text}
+            {#each stepInfo.text as t}
+                <p>{t}</p>
+            {/each}
+        {/if}
     </section>
 
-    {#each formQuestions as q}
-        <AInput required={q.required} label={q.label} error={errors[q.id] ? 'Please fill this out!' : null}>
-            {#if q.type === 'date'}
+    {#each stepQuestions as q}
+        <AInput required={q.required} label={q.label} error={errors[q.id] ? "Please fill this out!" : null}>
+            {#if q.type === "date"}
                 <input
                     id={q.id}
                     class="form-input"
                     type="date"
-                    placeholder={q.placeholder || ''}
+                    placeholder={q.placeholder || ""}
                     bind:value={payload[q.id]}
                     on:focus={() => {}}
                     on:input={() => onInput(q)}
                     on:blur={() => checkInput(q)}
                 />
-            {:else if q.type === 'number'}
+            {:else if q.type === "number"}
                 <input
                     id={q.id}
                     class="form-input"
                     type="number"
-                    placeholder={q.placeholder || ''}
+                    placeholder={q.placeholder || ""}
                     bind:value={payload[q.id]}
                     on:focus={() => {}}
                     on:input={() => onInput(q)}
                     on:blur={() => checkInput(q)}
                 />
-            {:else if q.type === 'email'}
+            {:else if q.type === "email"}
                 <input
                     id={q.id}
                     class="form-input"
                     type="email"
-                    placeholder={q.placeholder || ''}
+                    placeholder={q.placeholder || ""}
                     bind:value={payload[q.id]}
                     on:focus={() => {}}
                     on:input={() => onInput(q)}
@@ -167,7 +222,7 @@
                     id={q.id}
                     class="form-input"
                     type="text"
-                    placeholder={q.placeholder || ''}
+                    placeholder={q.placeholder || ""}
                     bind:value={payload[q.id]}
                     on:focus={() => {}}
                     on:input={() => onInput(q)}
@@ -180,6 +235,11 @@
             {/if}
         </AInput>
     {/each}
+
+    <section>
+        <button on:click={() => goPrev()}>PREV</button>
+        <button on:click={() => goNext()}>NEXT</button>
+    </section>
 
     <!-- payment details -->
     <section>
@@ -233,6 +293,7 @@ This action contributes to promote the ecological thinking and to create a new l
 
         img {
             max-width: 100%;
+            width: 100%;
         }
 
         .map {
@@ -256,8 +317,13 @@ This action contributes to promote the ecological thinking and to create a new l
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 36px;
             font-weight: 600;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 400;
         }
 
         h3 {
