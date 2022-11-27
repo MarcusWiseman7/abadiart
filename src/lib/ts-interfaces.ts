@@ -26,7 +26,8 @@ export interface IContentBlock {
     _type: string;
     _key: string;
     style: string;
-    children?: [{ text?: string; marks: string[], markDefs?: [] }];
+    children?: { _key: string; _type: string; text?: string; marks: string[], markDefs?: []; }[];
+    markDefs?: { _key: string; _type: string; href?: string; }[],
     asset?: SanityImageAssetDocument;
     alt?: string;
     caption?: string;

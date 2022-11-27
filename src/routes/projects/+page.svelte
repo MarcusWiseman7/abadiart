@@ -1,6 +1,6 @@
 <script lang="ts">
     // types
-    import type { IContent, IPageData, IProject } from '$lib/ts-interfaces';
+    import type { IContent, IPageData, IProject } from "$lib/ts-interfaces";
     interface IData extends IPageData {
         projects: IProject[];
     }
@@ -8,13 +8,12 @@
     /** @type {import('./$types').PageData} */
     export let data: IData;
 
-    import { localeString } from '$lib/helpers';
-    import { locale } from '$lib/stores';
-    import { onMount } from 'svelte';
+    import { localeString } from "$lib/helpers";
+    import { locale } from "$lib/stores";
+    import { onMount } from "svelte";
 
     // components
-    import ContentBlocks from '$lib/components/ContentBlocks.svelte';
-    import ElPedrinoForm from '$lib/components/ElPedrinoForm.svelte';
+    import ContentBlocks from "$lib/components/ContentBlocks.svelte";
 
     // data
     $: content =
@@ -24,7 +23,7 @@
         data.projects[0].description[$locale as keyof IContent];
 
     onMount(() => {
-        console.log('data :>> ', data);
+        console.log("data :>> ", data);
     });
 </script>
 
@@ -43,9 +42,8 @@
 </svelte:head>
 
 <div class="page">
-    <!-- {#if data?.projects?.length && typeof content === 'object'}
-        <ContentBlocks modifiers={['project', 'center-headers-mobile']} contentBlocks={content} />
-        <a href="https://forms.gle/PjztwwGZnMPvpQQ87" target="_blank">Adopt here</a>
-    {/if} -->
-    <ElPedrinoForm />
+    {#if data?.projects?.length && typeof content === "object"}
+        <ContentBlocks modifiers={["project", "center-headers-mobile"]} contentBlocks={content} />
+        <a href="/forms/el-padrino">Adopt here</a>
+    {/if}
 </div>
