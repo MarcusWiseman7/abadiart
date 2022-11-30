@@ -70,3 +70,39 @@ export interface INav {
     name: ILocaleString;
     href: string;
 }
+
+export interface IPadrinoPayload {
+    email: string | null;
+    surname: string | null;
+    name: string | null;
+    residence: string | null;
+    phone?: string | null;
+    treeName: string | null;
+    treeId: number | null;
+    date: Date | null;
+    donate: string | null;
+}
+
+export interface IPadrinoErrors {
+    email: boolean;
+    surname: boolean;
+    name: boolean;
+    residence: boolean;
+    phone: boolean;
+    treeName: boolean;
+    treeId: boolean;
+    date: boolean;
+}
+export interface IPadrinoQuestion {
+    what?: string;
+    title?: string;
+    subtitle?: string;
+    text?: string[];
+    id?: string;
+    label?: string;
+    placeholder?: string;
+    required?: boolean;
+    type?: string;
+    images?: { src: string; alt: string }[];
+    radioOptions?: string[];
+}

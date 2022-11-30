@@ -40,6 +40,7 @@ body {
 }
 
 .form-btn {
+    $color-submit: rgb(194 65 12);
     padding: 6px 22px;
     background-color: #dadce0;
     border-radius: 8px;
@@ -47,5 +48,19 @@ body {
 
     &:hover {
         background-color: rgba($color: #dadce0, $alpha: 0.8);
+    }
+
+    &--disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    &--submit {
+        background-color: $color-submit;
+        color: #ffffff;
+
+        &:hover {
+            background-color: rgba($color: $color-submit, $alpha: 0.8);
+        }
     }
 }
