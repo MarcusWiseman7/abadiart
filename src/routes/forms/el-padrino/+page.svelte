@@ -16,10 +16,11 @@
     import mapImage from '$lib/assets/images/map.jpg';
 
     // data
-    let step = 0;
+    let step = 3;
     const formQuestionsStep1: IPadrinoQuestion[] = [
         {
             what: 'info',
+            highlightedTitle: true,
             title: 'WHO YOU ARE',
             text: ['To identify you on the adoption certificate, and to send it to you.'],
         },
@@ -46,6 +47,7 @@
     const formQuestionsStep2: IPadrinoQuestion[] = [
         {
             what: 'info',
+            highlightedTitle: true,
             title: 'Giving the Name and Surname',
             text: [
                 'After you adopt the tree we will send you an adoption certificate which is valid for one year only, containing beautiful photos of your tree. The certificate will identify you as the Padrin@ of the tree and will include your chosen name for the tree. This fictional kinship aims to connect you with the tree, so you can build up a family relationship between you and your adopted tree.',
@@ -73,6 +75,7 @@
     const formQuestionsStep3: IPadrinoQuestion[] = [
         {
             what: 'info',
+            highlightedTitle: true,
             title: 'Mandarin Donation',
             text: [
                 'The collection of mandarins takes place over the months of October and November.  Each person who adopts a tree and has paid the fee will have the option of collecting 30kg of mandarins yourself or making a act of generosity, where we pick the mandarins and donate for you to people in need in the surrounding community',
@@ -90,6 +93,7 @@
     const formQuestionsStep4: IPadrinoQuestion[] = [
         {
             what: 'info',
+            highlightedTitle: true,
             title: 'The Linking Line, People, Trees and Lineage',
             text: [
                 'The Linking Line, people, trees and genealogy project idea explores the lineage between people and trees and focuses on the connection and relationship which is created by Padrin@ Dame Un Nombre project. These connections will inform the Linking Line art project.',
@@ -257,7 +261,9 @@
                 <!-- step info -->
                 <section class="outlined">
                     {#if q.title}
-                        <h3 class="form__info__title">{q.title}</h3>
+                        <h3 class={`form__info__title ${q.highlightedTitle ? 'form__info__title--highlighted' : ''}`}>
+                            {q.title}
+                        </h3>
                     {/if}
                     {#if q.text}
                         <div class="form__info__text">
@@ -273,7 +279,13 @@
                         <div class="form__question__radios">
                             {#each q.radioOptions as option}
                                 <div class="form__question__radio">
-                                    <input type="radio" name={q.id} bind:group={payload[q.id]} value={option} />
+                                    <input
+                                        type="radio"
+                                        name={q.id}
+                                        bind:group={payload[q.id]}
+                                        value={option}
+                                        id={option}
+                                    />
                                     <label for={option}>{option}</label>
                                 </div>
                             {/each}
@@ -336,15 +348,18 @@
         {/each}
 
         <section class="form__nav">
-            {#if step > 0}
-                <button class="form-btn" on:click={() => goPrev()}>PREV</button>
-            {/if}
-            {#if step < 3}
-                <button class={`form-btn ${!formOK ? 'form-btn--disabled' : ''}`} on:click={() => goNext()}>NEXT</button
-                >
-            {:else}
-                <button class="form-btn form-btn--submit" on:click={() => onSubmit()}>Submit</button>
-            {/if}
+            <div>
+                {#if step > 0}
+                    <button class="form-btn" on:click={() => goPrev()}>PREV</button>
+                {/if}
+                {#if step < 3}
+                    <button class={`form-btn ${!formOK ? 'form-btn--disabled' : ''}`} on:click={() => goNext()}
+                        >NEXT</button
+                    >
+                {:else}
+                    <button class="form-btn form-btn--submit" on:click={() => onSubmit()}>Submit</button>
+                {/if}
+            </div>
 
             {#if step === 3}
                 <p>A copy of your responses will be emailed to the address you provided.</p>
@@ -368,41 +383,47 @@
 </div>
 
 <style lang="scss">
+    $color-gold: rgb(235, 194, 74);
+
     .headline {
         text-align: center;
-        margin: 20px 0 60px 0;
+        margin: 20px 0 40px 0;
+
+        @media (min-width: 600px) {
+            margin: 20px 0 60px 0;
+        }
 
         &__title {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 600;
+
+            @media (min-width: 600px) {
+                font-size: 36px;
+            }
         }
 
         &__subtitle {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 400;
+
+            @media (min-width: 600px) {
+                font-size: 28px;
+            }
         }
 
         &__fine-print {
             color: gray;
+            font-size: 70%;
+
+            @media (min-width: 600px) {
+                font-size: 80%;
+            }
         }
     }
 
-    section {
-        padding: 0 8px;
-
-        @media (min-width: 600px) {
-            padding: 0 30px;
-        }
-
-        &.outlined {
-            border: 1px solid #dadce0;
-            padding: 10px 16px 16px;
-            border-radius: 20px;
-
-            @media (min-width: 600px) {
-                padding: 20px 30px 30px;
-            }
-        }
+    .outlined {
+        border: 1px solid #dadce0;
+        border-radius: 20px;
     }
 
     .form {
@@ -413,14 +434,34 @@
 
         &__info {
             &__title {
-                font-size: 28px;
+                font-size: 20px;
                 font-weight: 400;
+                padding: 10px 16px;
+                margin-bottom: 10px;
+                border-top-left-radius: 20px;
+                border-top-right-radius: 20px;
+
+                @media (min-width: 600px) {
+                    font-size: 28px;
+                    padding: 20px 30px;
+                    margin-bottom: 20px;
+                }
+
+                &--highlighted {
+                    background-color: $color-gold;
+                }
             }
 
             &__text {
                 display: flex;
                 flex-direction: column;
-                gap: 20px;
+                gap: 10px;
+                padding: 8px 16px;
+
+                @media (min-width: 600px) {
+                    padding: 20px 30px 30px;
+                    gap: 20px;
+                }
             }
         }
 
@@ -454,6 +495,7 @@
 
         &__nav {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             justify-content: end;
         }

@@ -95,6 +95,7 @@ export interface IPadrinoErrors {
 }
 export interface IPadrinoQuestion {
     what?: string;
+    highlightedTitle?: boolean;
     title?: string;
     subtitle?: string;
     text?: string[];
