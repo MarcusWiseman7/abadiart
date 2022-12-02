@@ -1,24 +1,12 @@
 import type { SanityDocument, SanityImageAssetDocument } from '@sanity/client';
 
-// export interface Posts {
-//     title: string;
-//     slug: string;
-//     author: {
-//         name: string;
-//         image: {};
-//     };
-//     mainImage?: {};
-//     categories?: [
-//         {
-//             category: {};
-//         }
-//     ];
-//     publishedAt: Date;
-//     body: [];
-// };
-
+export interface ILocaleString {
+    en: string;
+    es: string;
+    _type?: string;
+}
 export interface IPageData extends SanityDocument {
-    title?: { en?: string; es?: string; };
+    title?: ILocaleString;
     description?: string;
 }
 
@@ -40,10 +28,7 @@ export interface IContent {
 }
 
 export interface IProject {
-    title: {
-        en?: string;
-        es?: string;
-    };
+    title: ILocaleString;
     description: IContent;
     desktopDescription: IContent;
 }
@@ -60,12 +45,6 @@ export interface IMainImage extends SanityImageAssetDocument {
     caption?: string;
 }
 
-export interface ILocaleString {
-    en: string;
-    es: string;
-    _type?: string;
-}
-
 export interface INav {
     name: ILocaleString;
     href: string;
@@ -79,7 +58,7 @@ export interface IPadrinoPayload {
     phone?: string | null;
     treeName: string | null;
     treeId: number | null;
-    date: Date | null;
+    adoptionDate: Date | null;
     donate: string | null;
 }
 
@@ -91,19 +70,19 @@ export interface IPadrinoErrors {
     phone: boolean;
     treeName: boolean;
     treeId: boolean;
-    date: boolean;
+    adoptionDate: boolean;
 }
 export interface IPadrinoQuestion {
     what?: string;
     highlightedTitle?: boolean;
-    title?: string;
-    subtitle?: string;
-    text?: string[];
+    title?: ILocaleString;
+    subtitle?: ILocaleString;
+    text?: ILocaleString[];
     id?: string;
-    label?: string;
-    placeholder?: string;
+    label?: ILocaleString;
+    placeholder?: ILocaleString;
     required?: boolean;
     type?: string;
-    images?: { src: string; alt: string }[];
-    radioOptions?: string[];
+    images?: IMainImage[];
+    radioOptions?: ILocaleString[];
 }

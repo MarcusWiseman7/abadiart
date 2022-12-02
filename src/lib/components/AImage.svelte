@@ -41,7 +41,7 @@
         {alt}
     />
 {:else if image}
-    <img class="addClass" src={urlFor(image).format('webp').url()} {alt} />
+    <img class={addClass} src={urlFor(image).format('webp').url()} {alt} />
 {/if}
 
 <style lang="scss">

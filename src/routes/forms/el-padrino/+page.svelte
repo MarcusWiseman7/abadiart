@@ -1,7 +1,30 @@
 <script lang="ts">
     // types
-    import type { IPadrinoErrors, IPadrinoPayload, IPadrinoQuestion, IPageData } from '$lib/ts-interfaces';
-    interface IData extends IPageData {}
+    import type {
+        ILocaleString,
+        IMainImage,
+        IPadrinoErrors,
+        IPadrinoPayload,
+        IPadrinoQuestion,
+        IPageData,
+    } from '$lib/ts-interfaces';
+    interface IData extends IPageData {
+        form: {
+            headline: {
+                title: ILocaleString;
+                subtitle: ILocaleString;
+                finePrint: ILocaleString;
+            };
+            heroImage: IMainImage;
+            formSteps: {
+                title: string;
+                formStepBlocks: IPadrinoQuestion[];
+                _key: string;
+                _type: string;
+            }[];
+            paymentDetails: ILocaleString[];
+        };
+    }
 
     /** @type {import('./$types').PageData} */
     export let data: IData;
@@ -13,120 +36,18 @@
 
     // components
     import AInput from '$lib/components/AInput.svelte';
-    import mapImage from '$lib/assets/images/map.jpg';
+    import { onMount } from 'svelte';
+    import AImage from '$lib/components/AImage.svelte';
 
     // data
-    let step = 3;
-    const formQuestionsStep1: IPadrinoQuestion[] = [
-        {
-            what: 'info',
-            highlightedTitle: true,
-            title: 'WHO YOU ARE',
-            text: ['To identify you on the adoption certificate, and to send it to you.'],
-        },
-        {
-            what: 'question',
-            id: 'email',
-            label: 'Email address',
-            placeholder: '',
-            required: true,
-            type: 'email',
-        },
-        { what: 'question', id: 'surname', label: 'Surname', placeholder: 'Surname', required: true },
-        { what: 'question', id: 'name', label: 'Name', placeholder: 'Name', required: true },
-        {
-            what: 'question',
-            id: 'residence',
-            label: 'Place of residence ( Province, country )',
-            placeholder: 'Murcia, Spain',
-            required: true,
-        },
-        { what: 'question', id: 'phone', label: 'Phone number', placeholder: '', required: false },
-    ];
+    let step = 0;
+    let imageWidth = 0;
 
-    const formQuestionsStep2: IPadrinoQuestion[] = [
-        {
-            what: 'info',
-            highlightedTitle: true,
-            title: 'Giving the Name and Surname',
-            text: [
-                'After you adopt the tree we will send you an adoption certificate which is valid for one year only, containing beautiful photos of your tree. The certificate will identify you as the Padrin@ of the tree and will include your chosen name for the tree. This fictional kinship aims to connect you with the tree, so you can build up a family relationship between you and your adopted tree.',
-                'This action contributes to promote the ecological thinking and to create a new lineage between trees and people. We will also inform you about events at El Refugio, where you could meet your adopted tree in person!  If the project or photos of your tree spark any memories of experiences about trees and nature in your life then please do tell us. We would be delighted to know.',
-            ],
-        },
-        {
-            what: 'question',
-            id: 'treeName',
-            label: `Give a name to your adopted tree and add your surname if you like?`,
-            placeholder: 'Lovely name',
-            required: true,
-        },
-        {
-            what: 'question',
-            id: 'treeId',
-            label: 'In this map the mandarin trees are marked with a number - Please choose a number which will become your tree and choose a color to mark it on the map',
-            placeholder: 'Tree id number',
-            required: true,
-            type: 'number',
-            images: [{ src: mapImage, alt: 'map' }],
-        },
-        { what: 'question', id: 'date', label: 'Date of Adoption', placeholder: '', required: true, type: 'date' },
-    ];
-    const formQuestionsStep3: IPadrinoQuestion[] = [
-        {
-            what: 'info',
-            highlightedTitle: true,
-            title: 'Mandarin Donation',
-            text: [
-                'The collection of mandarins takes place over the months of October and November.  Each person who adopts a tree and has paid the fee will have the option of collecting 30kg of mandarins yourself or making a act of generosity, where we pick the mandarins and donate for you to people in need in the surrounding community',
-            ],
-        },
-        {
-            what: 'question',
-            id: 'donate',
-            label: 'Will you donate the mandarins and we will pick and donate them to people with needs in the community? Or would you like to pick the mandarins yourself?',
-            type: 'radio',
-            radioOptions: ['I prefer to donate', 'I prefer to pick them myself'],
-            required: true,
-        },
-    ];
-    const formQuestionsStep4: IPadrinoQuestion[] = [
-        {
-            what: 'info',
-            highlightedTitle: true,
-            title: 'The Linking Line, People, Trees and Lineage',
-            text: [
-                'The Linking Line, people, trees and genealogy project idea explores the lineage between people and trees and focuses on the connection and relationship which is created by Padrin@ Dame Un Nombre project. These connections will inform the Linking Line art project.',
-                `The people who participate in the tree adoption before 30 December 2022 will form one extended People-Trees Family. Their names, together with their tree's given name and surname, will form the base text for the next Linking Line art and calligraphy work`,
-            ],
-        },
-        {
-            what: 'info',
-            title: 'Family Abad Lorente Lineage',
-        },
-        {
-            what: 'info',
-            title: 'People and Trees Family 2022',
-            images: [],
-        },
-        {
-            what: 'info',
-            text: [
-                'We would like to thank you for your participation on this project and if you have any further question or suggestions please <a href="/contact-us">contact us</a>',
-            ],
-            images: [],
-        },
-        {
-            what: 'info',
-            text: ['Linking Line - Originated with Abad Lorente Lineage'],
-            images: [],
-        },
-    ];
-
-    $: stepQuestions = [formQuestionsStep1, formQuestionsStep2, formQuestionsStep3, formQuestionsStep4][step];
+    $: formStep = data?.form?.formSteps && data.form.formSteps[step];
+    $: stepQuestions = formStep?.formStepBlocks;
     $: formOK = [
         payload.email && payload.surname && payload.name && payload.residence,
-        payload.treeId && payload.date,
+        payload.treeId && payload.adoptionDate,
         payload.donate !== null,
         true,
     ][step];
@@ -138,7 +59,7 @@
         phone: null,
         treeName: null,
         treeId: null,
-        date: null,
+        adoptionDate: null,
         donate: null,
     };
 
@@ -150,7 +71,7 @@
         phone: false,
         treeName: false,
         treeId: false,
-        date: false,
+        adoptionDate: false,
     };
 
     // methods
@@ -159,6 +80,7 @@
 
         if (required) {
             const value = payload[id as keyof IPadrinoPayload];
+            console.log('id, value, !!!value :>> ', id, value, !!!value);
             errors[id as keyof IPadrinoErrors] = !!!value;
         }
     };
@@ -226,6 +148,24 @@
             goto('/projects');
         }
     };
+
+    const getImageWidth = (): void => {
+        const innerWidth = window.innerWidth;
+
+        if (innerWidth < 600) {
+            imageWidth = 400;
+        } else if (innerWidth < 1024) {
+            imageWidth = 840;
+        } else if (innerWidth < 1280) {
+            imageWidth = 780;
+        } else {
+            imageWidth = 840;
+        }
+    };
+
+    onMount(() => {
+        getImageWidth();
+    });
 </script>
 
 <svelte:head>
@@ -242,18 +182,24 @@
     {/if}
 </svelte:head>
 
+<svelte:window on:resize={() => getImageWidth()} />
+
 <div class="page">
     <!-- form image -- mandarins -->
-    <section>
-        <img src="" alt="mandarins" />
-    </section>
+    {#if data?.form?.heroImage}
+        <section>
+            <img src="" alt="mandarins" />
+        </section>
+    {/if}
 
     <!-- headline -->
-    <section class="headline">
-        <h1 class="headline__title">Padrin@ Dame Un Nombre</h1>
-        <h2 class="headline__subtitle">Tree Adoption Application Form</h2>
-        <small class="headline__fine-print">(Information provided used for administrative purposes only)</small>
-    </section>
+    {#if data?.form?.headline}
+        <section class="headline">
+            <h1 class="headline__title">{localeString(data.form.headline.title, $locale)}</h1>
+            <h2 class="headline__subtitle">{localeString(data.form.headline.subtitle, $locale)}</h2>
+            <small class="headline__fine-print">{localeString(data.form.headline.finePrint, $locale)}</small>
+        </section>
+    {/if}
 
     <form class="form" on:submit|preventDefault>
         {#each stepQuestions as q}
@@ -262,19 +208,42 @@
                 <section class="outlined">
                     {#if q.title}
                         <h3 class={`form__info__title ${q.highlightedTitle ? 'form__info__title--highlighted' : ''}`}>
-                            {q.title}
+                            {localeString(q.title, $locale)}
                         </h3>
                     {/if}
                     {#if q.text}
                         <div class="form__info__text">
                             {#each q.text as t}
-                                <p>{t}</p>
+                                <p>{@html localeString(t, $locale)}</p>
+                            {/each}
+                        </div>
+                    {/if}
+
+                    {#if q.images?.length && imageWidth}
+                        <div class="form__info__images">
+                            {#each q.images as image}
+                                <div
+                                    class={`form__info__image ${
+                                        image._key === '4830b9654cb4' ? 'form__info__image--logo' : ''
+                                    }`}
+                                >
+                                    <AImage
+                                        addClass="fullscreen"
+                                        width={imageWidth}
+                                        {image}
+                                        alt={image.alt || 'question image'}
+                                    />
+                                </div>
                             {/each}
                         </div>
                     {/if}
                 </section>
             {:else}
-                <AInput required={q.required} label={q.label} error={errors[q.id] ? 'Please fill this out!' : null}>
+                <AInput
+                    required={q.required}
+                    label={q.label ? localeString(q.label, $locale) : ''}
+                    error={errors[q.id] ? 'Please fill this out!' : null}
+                >
                     {#if q.type === 'radio' && q.radioOptions?.length}
                         <div class="form__question__radios">
                             {#each q.radioOptions as option}
@@ -283,10 +252,10 @@
                                         type="radio"
                                         name={q.id}
                                         bind:group={payload[q.id]}
-                                        value={option}
-                                        id={option}
+                                        value={localeString(option, $locale)}
+                                        id={localeString(option, $locale)}
                                     />
-                                    <label for={option}>{option}</label>
+                                    <label for={localeString(option, $locale)}>{localeString(option, $locale)}</label>
                                 </div>
                             {/each}
                         </div>
@@ -295,7 +264,11 @@
                             id={q.id}
                             class="form-input"
                             type="date"
-                            placeholder={q.placeholder || ''}
+                            placeholder={q.placeholder
+                                ? q.placeholder
+                                    ? localeString(q.placeholder, $locale)
+                                    : ''
+                                : ''}
                             bind:value={payload[q.id]}
                             on:focus={() => {}}
                             on:input={() => onInput(q)}
@@ -306,7 +279,7 @@
                             id={q.id}
                             class="form-input"
                             type="number"
-                            placeholder={q.placeholder || ''}
+                            placeholder={q.placeholder ? localeString(q.placeholder, $locale) : ''}
                             bind:value={payload[q.id]}
                             on:focus={() => {}}
                             on:input={() => onInput(q)}
@@ -317,7 +290,7 @@
                             id={q.id}
                             class="form-input"
                             type="email"
-                            placeholder={q.placeholder || ''}
+                            placeholder={q.placeholder ? localeString(q.placeholder, $locale) : ''}
                             bind:value={payload[q.id]}
                             on:focus={() => {}}
                             on:input={() => onInput(q)}
@@ -328,7 +301,7 @@
                             id={q.id}
                             class="form-input"
                             type="text"
-                            placeholder={q.placeholder || ''}
+                            placeholder={q.placeholder ? localeString(q.placeholder, $locale) : ''}
                             bind:value={payload[q.id]}
                             on:focus={() => {}}
                             on:input={() => onInput(q)}
@@ -336,10 +309,17 @@
                         />
                     {/if}
 
-                    {#if q.images?.length}
+                    {#if q.images?.length && imageWidth}
                         <div class="form__question__images">
-                            {#each q.images as pic}
-                                <img class="form__question__image" src={pic.src} alt={pic.alt} />
+                            {#each q.images as image}
+                                <div class="form__question__image">
+                                    <AImage
+                                        addClass="fullscreen"
+                                        width={imageWidth}
+                                        {image}
+                                        alt={image.alt || 'question image'}
+                                    />
+                                </div>
                             {/each}
                         </div>
                     {/if}
@@ -361,24 +341,19 @@
                 {/if}
             </div>
 
-            {#if step === 3}
+            <!-- {#if step === 3}
                 <p>A copy of your responses will be emailed to the address you provided.</p>
-            {/if}
+            {/if} -->
         </section>
 
         <!-- payment details -->
-        <section>
-            <p>
-                From the numbered tree map in step 2 please choose your tree number and make the payment in the next 5
-                days after you submit the form to the following account details:
-            </p>
-            <br />
-            <p>Adoption fee: €45</p>
-            <p>Account Name: Dolores Abad Lorente</p>
-            <p>IBAN/BIC. ES56 2100 4498 1601 0012 1743 / CAIXESBBXXX</p>
-            <br />
-            <p>Only after your payment is received, will the adoption be finalized.</p>
-        </section>
+        {#if data?.form?.paymentDetails}
+            <section class="form__payment-details">
+                {#each data.form.paymentDetails as detail}
+                    <p>{localeString(detail, $locale)}</p>
+                {/each}
+            </section>
+        {/if}
     </form>
 </div>
 
@@ -463,6 +438,32 @@
                     gap: 20px;
                 }
             }
+
+            &__images {
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                padding: 8px 16px;
+
+                @media (min-width: 600px) {
+                    padding: 20px 30px 30px;
+                }
+            }
+
+            &__image {
+                max-width: 100%;
+                width: 100%;
+
+                &--logo {
+                    max-width: 120px;
+                    max-height: 120px;
+
+                    @media (min-width: 600px) {
+                        max-width: 200px;
+                        max-height: 200px;
+                    }
+                }
+            }
         }
 
         &__question {
@@ -498,6 +499,18 @@
             flex-direction: column;
             gap: 10px;
             justify-content: end;
+        }
+
+        &__payment-details {
+            p {
+                &:first-child {
+                    margin-bottom: 20px;
+                }
+
+                &:last-child {
+                    margin-top: 20px;
+                }
+            }
         }
     }
 </style>

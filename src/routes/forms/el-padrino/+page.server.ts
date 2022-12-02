@@ -17,9 +17,9 @@ const transporter = nodemailer.createTransport({
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ }) {
-    // const query = `*[_type == 'contact'][0]`;
-    // const res = await sanity.fetch(query);
-    // if (res) return res;
+    const query = `*[_type == 'elPadrino'][0]`;
+    const res = await sanity.fetch(query);
+    if (res) return res;
     return {};
 }
 
@@ -37,7 +37,7 @@ export const actions = {
                 phone: null,
                 treeName: null,
                 treeId: null,
-                date: null,
+                adoptionDate: null,
                 donate: null,
             };
             
@@ -56,7 +56,7 @@ export const actions = {
                     <h5>Surname: ${submission.surname}</h5>
                     <h5>Residence: ${submission.residence}</h5>
                     <h5>Phone: ${submission.phone}</h5>
-                    <h5>Adoption date: ${submission.date}</h5>
+                    <h5>Adoption date: ${submission.adoptionDate}</h5>
                     <h5>Tree ID: ${submission.treeId}</h5>
                     <h5>Tree name: ${submission.treeName}</h5>
                     <h5>Donage or Pick?: ${submission.donate}</h5>
