@@ -1,10 +1,15 @@
 <script lang="ts">
+    // main styles
     import '../app.scss';
 
+    // helpers
+    import { appMessages, loading } from '$lib/stores';
+
+    // components
     import AFooter from '$lib/components/AFooter.svelte';
     import Message from '$lib/components/Message.svelte';
-    import { appMessages } from '$lib/stores';
     import AHeader from '$lib/components/AHeader.svelte';
+    import ALoading from '$lib/components/ALoading.svelte';
 </script>
 
 <div class="layout">
@@ -14,10 +19,16 @@
 
     <AFooter />
 
+    <!-- APP MESSAGES -->
     {#if $appMessages?.length}
         {#each $appMessages as messageObj}
             <Message {messageObj} />
         {/each}
+    {/if}
+
+    <!-- APP LOADING... -->
+    {#if $loading}
+        <ALoading />
     {/if}
 </div>
 
@@ -30,5 +41,6 @@
         padding-top: 20px;
         width: 100%;
         min-height: 100vh;
+        position: relative;
     }
 </style>

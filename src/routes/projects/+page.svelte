@@ -1,6 +1,6 @@
 <script lang="ts">
     // types
-    import type { IContent, IPageData, IProject } from "$lib/ts-interfaces";
+    import type { IContent, IPageData, IProject } from '$lib/ts-interfaces';
     interface IData extends IPageData {
         projects: IProject[];
     }
@@ -8,12 +8,11 @@
     /** @type {import('./$types').PageData} */
     export let data: IData;
 
-    import { localeString } from "$lib/helpers";
-    import { locale } from "$lib/stores";
-    import { onMount } from "svelte";
+    import { localeString } from '$lib/helpers';
+    import { locale } from '$lib/stores';
 
     // components
-    import ContentBlocks from "$lib/components/ContentBlocks.svelte";
+    import ContentBlocks from '$lib/components/ContentBlocks.svelte';
 
     // data
     $: content =
@@ -21,10 +20,6 @@
         data.projects.length &&
         data.projects[0].description &&
         data.projects[0].description[$locale as keyof IContent];
-
-    onMount(() => {
-        console.log("data :>> ", data);
-    });
 </script>
 
 <svelte:head>
@@ -42,8 +37,7 @@
 </svelte:head>
 
 <div class="page">
-    {#if data?.projects?.length && typeof content === "object"}
-        <ContentBlocks modifiers={["project", "center-headers-mobile"]} contentBlocks={content} />
-        <a href="/forms/el-padrino">Adopt here</a>
+    {#if data?.projects?.length && typeof content === 'object'}
+        <ContentBlocks modifiers={['project']} contentBlocks={content} />
     {/if}
 </div>

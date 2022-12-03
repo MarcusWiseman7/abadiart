@@ -7,6 +7,7 @@
         IPadrinoPayload,
         IPadrinoQuestion,
         IPageData,
+        IMessage,
     } from '$lib/ts-interfaces';
     interface IData extends IPageData {
         form: {
@@ -32,7 +33,7 @@
     // helpers
     import { goto } from '$app/navigation';
     import { localeString } from '$lib/helpers';
-    import { locale } from '$lib/stores';
+    import { loading, locale, appMessages } from '$lib/stores';
 
     // components
     import AInput from '$lib/components/AInput.svelte';
@@ -40,7 +41,7 @@
     import AImage from '$lib/components/AImage.svelte';
 
     // data
-    let step = 0;
+    let step = 3;
     let imageWidth = 0;
 
     $: formStep = data?.form?.formSteps && data.form.formSteps[step];
@@ -51,6 +52,7 @@
         payload.donate !== null,
         true,
     ][step];
+
     const payload: IPadrinoPayload = {
         email: null,
         surname: null,
@@ -64,7 +66,7 @@
         lang: 'en',
     };
 
-    let errors: IPadrinoErrors = {
+    const errors: IPadrinoErrors = {
         email: false,
         surname: false,
         name: false,
@@ -81,7 +83,6 @@
 
         if (required) {
             const value = payload[id as keyof IPadrinoPayload];
-            console.log('id, value, !!!value :>> ', id, value, !!!value);
             errors[id as keyof IPadrinoErrors] = !!!value;
         }
     };
@@ -126,28 +127,51 @@
         }
     };
 
-    const onSubmit = async (): Promise<void> => {
+    const onSubmit = (): void => {
         if (!formOK) return;
 
+        loading.set(true);
         payload.lang = $locale;
+
+        // success/error app messages
+        const successMsg: IMessage = {
+            message: `Form submitted successfully! Please check your email for a reply from us!`,
+            timeout: 6000,
+            type: 'success',
+            id: Date.now(),
+        };
+        const errorMsg: IMessage = {
+            message: 'Sorry, there was an error submitting the form, please try again...',
+            timeout: 6000,
+            type: 'error',
+            id: Date.now(),
+        };
+
+        // set up form payload
         const formData = new FormData();
         for (const property in payload) {
             formData.append(property, payload[property]);
         }
 
-        const response = await fetch('?/submission', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'x-sveltekit-action': 'true',
-            },
-        });
+        // const response = await fetch('?/submission', {
+        //     method: 'POST',
+        //     body: formData,
+        //     headers: {
+        //         'x-sveltekit-action': 'true',
+        //     },
+        // });
 
-        /** @type {import('@sveltejs/kit').ActionResult} */
-        const result = await response.json();
+        // /** @type {import('@sveltejs/kit').ActionResult} */
+        // const result = await response.json();
 
-        if (result.type === 'success') {
+        loading.set(false);
+
+        if (true) {
+            // if (result.type === 'success') {
             goto('/projects');
+            appMessages.update((a: IMessage[]) => [...a, successMsg]);
+        } else {
+            appMessages.update((a: IMessage[]) => [...a, errorMsg]);
         }
     };
 

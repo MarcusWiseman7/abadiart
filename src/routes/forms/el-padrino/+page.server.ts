@@ -49,7 +49,7 @@ export const actions = {
             // send abadiart the form submission
             const email1 = await transporter.sendMail({
                 from: 'Padrin@ Dame Un Nombre <no-reply.abadiart@outlook.com>',
-                to: 'md.wiseman@hotmail.com',
+                to: 'abadiartspace@gmail.com',
                 subject: 'Tree adoption form submission',
                 html: `
                     <h3>Padrin@ Dame Un Nombre - tree adoption form submission</h3>
@@ -57,15 +57,15 @@ export const actions = {
                     <h5>Name: ${submission.name}</h5>
                     <h5>Surname: ${submission.surname}</h5>
                     <h5>Residence: ${submission.residence}</h5>
-                    <h5>Phone: ${submission.phone}</h5>
+                    <h5>Phone: ${submission.phone ? submission.phone : 'No phone number given..'}</h5>
                     <h5>Adoption date: ${submission.adoptionDate}</h5>
                     <h5>Tree ID: ${submission.treeId}</h5>
                     <h5>Tree name: ${submission.treeName}</h5>
                     <h5>Donage or Pick?: ${submission.donate}</h5>
+                    <h5>Form submitted in ${submission.lang === 'en' ? 'English' : 'Spanish'} language</h5>
                 `,
             });
 
-            console.log('email1 :>> ', email1);
             const replyEmailHTML = [
                 `
                     <h3>Thank you for participating in the El Padrino@ project with El Refugio EcoArt.</h3>
@@ -101,17 +101,16 @@ export const actions = {
 
             // send the submitter an auto reply email
             const email2 = await transporter.sendMail({
-                from: 'AbadiArt <no-reply.abadiart@outlook.com>',
+                from: 'AbadiArt.org <no-reply.abadiart@outlook.com>',
                 to: submission.email,
                 subject: 'Tree adoption form submission',
                 html: submission.lang === 'en' ? replyEmailHTML[0] : replyEmailHTML[1],
             });
 
-            console.log('email2 :>> ', email2);
-
-            return { success: true };
+            if (!!(email1 && email2)) return { success: true };
+            else return invalid(500, { message: 'Email error, please try again' });
         } catch (err) {
-            return invalid(500, { message: 'Catch error: ' + err });
+            return invalid(500, { message: 'Server error, please try again :>> ' + err });
         }
     },
 }
