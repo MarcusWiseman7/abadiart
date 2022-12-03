@@ -81,4 +81,15 @@
             max-height: 600px;
         }
     }
+
+    .form-hero {
+        height: 100px;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+
+        @media (min-width: 600px) {
+            height: 200px;
+        }
+    }
 </style>

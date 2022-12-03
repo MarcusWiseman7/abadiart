@@ -60,6 +60,7 @@ export interface IPadrinoPayload {
     treeId: number | null;
     adoptionDate: Date | null;
     donate: string | null;
+    lang: string;
 }
 
 export interface IPadrinoErrors {

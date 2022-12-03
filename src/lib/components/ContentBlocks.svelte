@@ -1,46 +1,46 @@
 <script lang="ts">
     // types
-    import type { IContentBlock } from "$lib/ts-interfaces";
+    import type { IContentBlock } from '$lib/ts-interfaces';
 
     // props
     export let contentBlocks: IContentBlock[];
     export let modifiers: string[] = [];
 
     // components
-    import AImage from "./AImage.svelte";
+    import AImage from './AImage.svelte';
 </script>
 
 {#if contentBlocks}
-    <div class={`content-blocks ${modifiers.map((m) => "content-blocks--" + m).join(" ")}`}>
+    <div class={`content-blocks ${modifiers.map((m) => 'content-blocks--' + m).join(' ')}`}>
         {#each contentBlocks as block}
             {#if block.style && block.children}
                 <!-- heading or paragraph -->
                 {#each block.children as child}
-                    {#if block.markDefs?.length && block.markDefs?.find((m) => m._type === "link") && child.marks?.includes(block.markDefs.find((m) => m._type === "link")?._key)}
-                        <a class="anchor" href={block.markDefs.find((m) => m._type === "link").href}>
+                    {#if block.markDefs?.length && block.markDefs?.find((m) => m._type === 'link') && child.marks?.includes(block.markDefs.find((m) => m._type === 'link')?._key)}
+                        <a class="anchor" href={block.markDefs.find((m) => m._type === 'link').href}>
                             {child.text}
                         </a>
                     {:else}
                         <svelte:element
-                            this={child.marks.includes("strong")
-                                ? "strong"
-                                : block.style === "normal"
-                                ? "span"
+                            this={child.marks.includes('strong')
+                                ? 'strong'
+                                : block.style === 'normal'
+                                ? 'span'
                                 : block.style}
-                            class={block.style + " " + child.marks.map((m) => m)}
+                            class={block.style + ' ' + child.marks.map((m) => m)}
                         >
-                            {child.text}
+                            {@html child.text}
                         </svelte:element>
                     {/if}
                 {/each}
-            {:else if block._type === "mainImage" && block.asset}
+            {:else if block._type === 'mainImage' && block.asset}
                 <!-- image -->
                 <div class="image-wrapper">
                     <AImage
                         image={block.asset}
-                        alt={block.alt || "image"}
+                        alt={block.alt || 'image'}
                         width={450}
-                        addClass={`photo content-image ${modifiers.includes("project") ? "project" : ""}`}
+                        addClass={`photo content-image ${modifiers.includes('project') ? 'project' : ''}`}
                     />
                     {#if block.caption}
                         <span class="caption">{block.caption}</span>

@@ -61,6 +61,7 @@
         treeId: null,
         adoptionDate: null,
         donate: null,
+        lang: 'en',
     };
 
     let errors: IPadrinoErrors = {
@@ -128,6 +129,7 @@
     const onSubmit = async (): Promise<void> => {
         if (!formOK) return;
 
+        payload.lang = $locale;
         const formData = new FormData();
         for (const property in payload) {
             formData.append(property, payload[property]);
@@ -182,15 +184,24 @@
     {/if}
 </svelte:head>
 
-<svelte:window on:resize={() => getImageWidth()} />
+<svelte:window
+    on:resize={() => {
+        getImageWidth();
+    }}
+/>
 
 <div class="page">
     <!-- form image -- mandarins -->
-    {#if data?.form?.heroImage}
-        <section>
-            <img src="" alt="mandarins" />
-        </section>
-    {/if}
+    <section class="hero">
+        {#if data?.form?.heroImage}
+            <AImage
+                width={880}
+                addClass="form-hero"
+                image={data.form.heroImage}
+                alt={data.form.heroImage.alt || 'Mandarins'}
+            />
+        {/if}
+    </section>
 
     <!-- headline -->
     {#if data?.form?.headline}
@@ -330,7 +341,7 @@
         <section class="form__nav">
             <div>
                 {#if step > 0}
-                    <button class="form-btn" on:click={() => goPrev()}>PREV</button>
+                    <button class="form-btn" on:click={() => goPrev()}>BACK</button>
                 {/if}
                 {#if step < 3}
                     <button class={`form-btn ${!formOK ? 'form-btn--disabled' : ''}`} on:click={() => goNext()}
@@ -511,6 +522,14 @@
                     margin-top: 20px;
                 }
             }
+        }
+    }
+
+    .hero {
+        height: 100px;
+
+        @media (min-width: 600px) {
+            height: 200px;
         }
     }
 </style>
