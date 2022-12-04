@@ -9,7 +9,6 @@
         IPageData,
         IMessage,
     } from '$lib/ts-interfaces';
-
     interface IData extends IPageData {
         form: {
             headline: {
