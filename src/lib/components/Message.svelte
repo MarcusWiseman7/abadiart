@@ -20,7 +20,7 @@
 
 <style lang="scss">
     .message {
-        position: absolute;
+        position: fixed;
         bottom: 40px;
         left: 40px;
         z-index: 50;

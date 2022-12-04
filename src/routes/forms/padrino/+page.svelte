@@ -24,6 +24,11 @@
                 _type: string;
             }[];
             paymentDetails: ILocaleString[];
+            formButtons: {
+                next: ILocaleString;
+                back: ILocaleString;
+                submit: ILocaleString;
+            };
         };
     }
 
@@ -41,7 +46,7 @@
     import AImage from '$lib/components/AImage.svelte';
 
     // data
-    let step = 3;
+    let step = 0;
     let imageWidth = 0;
 
     $: formStep = data?.form?.formSteps && data.form.formSteps[step];
@@ -127,7 +132,7 @@
         }
     };
 
-    const onSubmit = (): void => {
+    const onSubmit = async (): Promise<void> => {
         if (!formOK) return;
 
         loading.set(true);
@@ -153,21 +158,20 @@
             formData.append(property, payload[property]);
         }
 
-        // const response = await fetch('?/submission', {
-        //     method: 'POST',
-        //     body: formData,
-        //     headers: {
-        //         'x-sveltekit-action': 'true',
-        //     },
-        // });
+        const response = await fetch('?/submission', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'x-sveltekit-action': 'true',
+            },
+        });
 
-        // /** @type {import('@sveltejs/kit').ActionResult} */
-        // const result = await response.json();
+        /** @type {import('@sveltejs/kit').ActionResult} */
+        const result = await response.json();
 
         loading.set(false);
 
-        if (true) {
-            // if (result.type === 'success') {
+        if (result.type === 'success') {
             goto('/projects');
             appMessages.update((a: IMessage[]) => [...a, successMsg]);
         } else {
@@ -363,22 +367,22 @@
         {/each}
 
         <section class="form__nav">
-            <div>
+            {#if data?.form?.formButtons}
                 {#if step > 0}
-                    <button class="form-btn" on:click={() => goPrev()}>BACK</button>
+                    <button class="form-btn" on:click={() => goPrev()}
+                        >{localeString(data.form.formButtons.back, $locale)}</button
+                    >
                 {/if}
                 {#if step < 3}
                     <button class={`form-btn ${!formOK ? 'form-btn--disabled' : ''}`} on:click={() => goNext()}
-                        >NEXT</button
+                        >{localeString(data.form.formButtons.next, $locale)}</button
                     >
                 {:else}
-                    <button class="form-btn form-btn--submit" on:click={() => onSubmit()}>Submit</button>
+                    <button class="form-btn form-btn--submit" on:click={() => onSubmit()}
+                        >{localeString(data.form.formButtons.submit, $locale)}</button
+                    >
                 {/if}
-            </div>
-
-            <!-- {#if step === 3}
-                <p>A copy of your responses will be emailed to the address you provided.</p>
-            {/if} -->
+            {/if}
         </section>
 
         <!-- payment details -->
@@ -531,9 +535,7 @@
 
         &__nav {
             display: flex;
-            flex-direction: column;
             gap: 10px;
-            justify-content: end;
         }
 
         &__payment-details {

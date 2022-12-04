@@ -2,13 +2,15 @@
     // types
     import type { IMessage } from '$lib/ts-interfaces';
 
+    // helpers
     import { goto } from '$app/navigation';
     import { logoImage, appMessages, nav, locale } from '$lib/stores';
+    import { localeString } from '$lib/helpers';
 
     // components
     import SendIcon from '$lib/assets/icons/send.svg';
-    import AImage from './AImage.svelte';
-    import { localeString } from '$lib/helpers';
+    import AImage from '$lib/components/AImage.svelte';
+    import Languages from './Languages.svelte';
 
     // state
     $: email = '';
@@ -56,14 +58,7 @@
             </ul>
         </nav>
 
-        <div class="languages">
-            <span class={'language' + ($locale === 'es' ? ' language--active' : '')} on:click={() => locale.set('es')}
-                >ES</span
-            >
-            <span class={'language' + ($locale === 'en' ? ' language--active' : '')} on:click={() => locale.set('en')}
-                >EN</span
-            >
-        </div>
+        <Languages mobile />
 
         <div class="newsletter">
             <h4>NEWSLETTER SIGNUP</h4>
@@ -195,27 +190,6 @@
 
             @media (min-width: 1024px) {
                 margin-top: 0;
-            }
-        }
-
-        .languages {
-            display: flex;
-            gap: 8px;
-            // position: fixed;
-            // top: 40px;
-            // right: 40px;
-
-            @media (min-width: 600px) {
-                display: none;
-            }
-
-            .language {
-                cursor: pointer;
-                color: lightgrey;
-
-                &--active {
-                    color: rgb(28, 25, 23);
-                }
             }
         }
     }

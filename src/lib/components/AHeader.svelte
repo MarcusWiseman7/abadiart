@@ -1,22 +1,20 @@
 <script lang="ts">
-    import { locale } from '$lib/stores';
+    // helpers
     import { page } from '$app/stores';
     $: pathname = $page.url.pathname;
+
+    // components
+    import Languages from './Languages.svelte';
 </script>
 
 <header>
-    {#if pathname === '/'}
-        <h1 class="title">Abadi Art</h1>
-    {/if}
+    <h1 class="title">
+        {#if pathname === '/'}
+            <span>Abadi Art</span>
+        {/if}
+    </h1>
 
-    <div class="languages">
-        <span class={'language' + ($locale === 'es' ? ' language--active' : '')} on:click={() => locale.set('es')}
-            >ES</span
-        >
-        <span class={'language' + ($locale === 'en' ? ' language--active' : '')} on:click={() => locale.set('en')}
-            >EN</span
-        >
-    </div>
+    <Languages mobile={false} />
 </header>
 
 <style lang="scss">
@@ -46,24 +44,6 @@
 
             @media (min-width: 1024px) {
                 font-size: 28px;
-            }
-        }
-
-        .languages {
-            display: none;
-            gap: 8px;
-
-            @media (min-width: 600px) {
-                display: flex;
-            }
-
-            .language {
-                cursor: pointer;
-                color: lightgrey;
-
-                &--active {
-                    color: rgb(28, 25, 23);
-                }
             }
         }
     }
