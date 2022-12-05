@@ -37,6 +37,7 @@ export const actions = {
                 phone: null,
                 treeName: null,
                 treeId: null,
+                color: '',
                 adoptionDate: null,
                 donate: null,
                 lang: 'en',
