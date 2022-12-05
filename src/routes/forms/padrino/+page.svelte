@@ -66,6 +66,7 @@
         phone: null,
         treeName: null,
         treeId: null,
+        color: '#a360f0',
         adoptionDate: null,
         donate: null,
         lang: 'en',
@@ -348,6 +349,13 @@
                         />
                     {/if}
 
+                    {#if q.id === 'treeId'}
+                        <div class="form-input form-input--color">
+                            <input type="color" id="colorwell" bind:value={payload.color} />
+                            <label for="colorwell">Choose color</label>
+                        </div>
+                    {/if}
+
                     {#if q.images?.length && imageWidth}
                         <div class="form__question__images">
                             {#each q.images as image}
@@ -547,6 +555,15 @@
                 &:last-child {
                     margin-top: 20px;
                 }
+            }
+        }
+
+        &-input {
+            &--color {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 6px 0;
             }
         }
     }

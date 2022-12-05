@@ -58,6 +58,7 @@ export interface IPadrinoPayload {
     phone?: string | null;
     treeName: string | null;
     treeId: number | null;
+    color: string;
     adoptionDate: Date | null;
     donate: string | null;
     lang: string;
