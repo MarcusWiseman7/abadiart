@@ -29,6 +29,12 @@
                 back: ILocaleString;
                 submit: ILocaleString;
             };
+            validations: {
+                required: ILocaleString;
+                validEmail: ILocaleString;
+                availableTreeId: ILocaleString;
+                treeIdNAN: ILocaleString;
+            };
         };
     }
 
@@ -46,17 +52,36 @@
     import AImage from '$lib/components/AImage.svelte';
 
     // data
-    let step = 0;
+    let step = 1;
     let imageWidth = 0;
 
     $: formStep = data?.form?.formSteps && data.form.formSteps[step];
     $: stepQuestions = formStep?.formStepBlocks;
     $: formOK = [
-        payload.email && payload.surname && payload.name && payload.residence,
-        payload.treeId && payload.adoptionDate,
+        payload.email &&
+            payload.surname &&
+            payload.name &&
+            payload.residence &&
+            !errors.email &&
+            !errors.surname &&
+            !errors.name &&
+            !errors.residence,
+        payload.treeId && payload.adoptionDate && !errors.treeId && !errors.adoptionDate,
         payload.donate !== null,
         true,
     ][step];
+    $: validationRequired = data?.form?.validations?.required
+        ? localeString(data.form.validations.required, $locale)
+        : 'Please fill this out';
+    $: validationEmail = data?.form?.validations?.validEmail
+        ? localeString(data.form.validations.validEmail, $locale)
+        : 'Please enter a valid email';
+    $: validationAvailableTreeId = data?.form?.validations?.availableTreeId
+        ? localeString(data.form.validations.availableTreeId, $locale)
+        : 'Please enter an available tree ID from the map';
+    $: validationTreeIdNAN = data?.form?.validations?.treeIdNAN
+        ? localeString(data.form.validations.treeIdNAN, $locale)
+        : 'Please enter a number from the map';
 
     const payload: IPadrinoPayload = {
         email: null,
@@ -73,23 +98,47 @@
     };
 
     const errors: IPadrinoErrors = {
-        email: false,
-        surname: false,
-        name: false,
-        residence: false,
-        phone: false,
-        treeName: false,
-        treeId: false,
-        adoptionDate: false,
+        email: '',
+        surname: '',
+        name: '',
+        residence: '',
+        phone: '',
+        treeName: '',
+        treeId: '',
+        adoptionDate: '',
     };
 
     // methods
     const checkInput = (question: IPadrinoQuestion): void => {
         const { required, id } = question;
+        const value = payload[id as keyof IPadrinoPayload];
 
-        if (required) {
-            const value = payload[id as keyof IPadrinoPayload];
-            errors[id as keyof IPadrinoErrors] = !!!value;
+        switch (id) {
+            case 'email':
+                if (!!value && typeof value === 'string') {
+                    errors.email = !/^\S+@\S+\.\S+$/.test(value) ? validationEmail : '';
+                } else if (!!!value) {
+                    errors.email = validationRequired;
+                }
+                break;
+            case 'treeId':
+                if (!!value || value === 0) {
+                    const adoptedTrees = [1, 5, 22, 48, 49];
+
+                    if (typeof value === 'number' && Number.isInteger(value)) {
+                        errors.treeId =
+                            value < 1 || value > 165 || adoptedTrees.includes(value) ? validationAvailableTreeId : '';
+                    } else {
+                        errors.treeId = validationTreeIdNAN;
+                    }
+                } else {
+                    errors.treeId = validationRequired;
+                }
+                break;
+            default:
+                if (required && !!!value) {
+                    errors[id as keyof IPadrinoErrors] = validationRequired;
+                }
         }
     };
 
@@ -278,11 +327,11 @@
                         </div>
                     {/if}
                 </section>
-            {:else}
+            {:else if q.hasOwnProperty('id') && !!q.id && typeof q.id === 'string'}
                 <AInput
                     required={q.required}
                     label={q.label ? localeString(q.label, $locale) : ''}
-                    error={errors[q.id] ? 'Please fill this out!' : null}
+                    error={errors[q.id] || null}
                 >
                     {#if q.type === 'radio' && q.radioOptions?.length}
                         <div class="form__question__radios">

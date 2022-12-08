@@ -65,14 +65,14 @@ export interface IPadrinoPayload {
 }
 
 export interface IPadrinoErrors {
-    email: boolean;
-    surname: boolean;
-    name: boolean;
-    residence: boolean;
-    phone: boolean;
-    treeName: boolean;
-    treeId: boolean;
-    adoptionDate: boolean;
+    email: string;
+    surname: string;
+    name: string;
+    residence: string;
+    phone: string;
+    treeName: string;
+    treeId: string;
+    adoptionDate: string;
 }
 export interface IPadrinoQuestion {
     what?: string;
