@@ -11,12 +11,12 @@
     } from '$lib/ts-interfaces';
     interface IData extends IPageData {
         form: {
+            heroImage: IMainImage;
             headline: {
                 title: ILocaleString;
                 subtitle: ILocaleString;
                 finePrint: ILocaleString;
             };
-            heroImage: IMainImage;
             formSteps: {
                 title: string;
                 formStepBlocks: IPadrinoQuestion[];
@@ -45,10 +45,10 @@
     import { goto } from '$app/navigation';
     import { localeString } from '$lib/helpers';
     import { loading, locale, appMessages } from '$lib/stores';
+    import { onMount } from 'svelte';
 
     // components
     import AInput from '$lib/components/AInput.svelte';
-    import { onMount } from 'svelte';
     import AImage from '$lib/components/AImage.svelte';
 
     // data
@@ -456,6 +456,14 @@
 <style lang="scss">
     $color-gold: rgb(235, 194, 74);
 
+    .hero {
+        height: 100px;
+
+        @media (min-width: 600px) {
+            height: 200px;
+        }
+    }
+
     .headline {
         text-align: center;
         margin: 20px 0 40px 0;
@@ -614,14 +622,6 @@
                 gap: 10px;
                 padding: 6px 0;
             }
-        }
-    }
-
-    .hero {
-        height: 100px;
-
-        @media (min-width: 600px) {
-            height: 200px;
         }
     }
 </style>

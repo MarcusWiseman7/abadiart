@@ -50,6 +50,21 @@ export interface INav {
     href: string;
 }
 
+export interface IContactPayload {
+    email: string;
+    name: string;
+    subject: string;
+    message: string;
+    lang: string;
+}
+
+export interface IContactErrors {
+    email: string;
+    name: string;
+    subject: string;
+    message: string;
+}
+
 export interface IPadrinoPayload {
     email: string | null;
     surname: string | null;
