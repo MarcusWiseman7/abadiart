@@ -52,21 +52,26 @@
     import AImage from '$lib/components/AImage.svelte';
 
     // data
-    let step = 1;
+    let step = 0;
     let imageWidth = 0;
 
     $: formStep = data?.form?.formSteps && data.form.formSteps[step];
     $: stepQuestions = formStep?.formStepBlocks;
     $: formOK = [
         payload.email &&
-            payload.surname &&
-            payload.name &&
-            payload.residence &&
             !errors.email &&
+            payload.surname &&
             !errors.surname &&
+            payload.name &&
             !errors.name &&
+            payload.residence &&
             !errors.residence,
-        payload.treeId && payload.adoptionDate && !errors.treeId && !errors.adoptionDate,
+        payload.treeName &&
+            !errors.treeName &&
+            payload.treeId &&
+            !errors.treeId &&
+            payload.adoptionDate &&
+            !errors.adoptionDate,
         payload.donate !== null,
         true,
     ][step];
@@ -138,6 +143,8 @@
             default:
                 if (required && !!!value) {
                     errors[id as keyof IPadrinoErrors] = validationRequired;
+                } else if (required && !!value) {
+                    errors[id as keyof IPadrinoErrors] = '';
                 }
         }
     };
