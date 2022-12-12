@@ -9,6 +9,7 @@
         IPageData,
         IMessage,
     } from '$lib/ts-interfaces';
+
     interface IData extends IPageData {
         form: {
             heroImage: IMainImage;
@@ -75,6 +76,7 @@
         payload.donate !== null,
         true,
     ][step];
+
     $: validationRequired = data?.form?.validations?.required
         ? localeString(data.form.validations.required, $locale)
         : 'Please fill this out';
@@ -89,12 +91,12 @@
         : 'Please enter a number from the map';
 
     const payload: IPadrinoPayload = {
-        email: null,
-        surname: null,
-        name: null,
-        residence: null,
-        phone: null,
-        treeName: null,
+        email: '',
+        surname: '',
+        name: '',
+        residence: '',
+        phone: '',
+        treeName: '',
         treeId: null,
         color: '#a360f0',
         adoptionDate: null,
@@ -212,7 +214,9 @@
         // set up form payload
         const formData = new FormData();
         for (const property in payload) {
-            formData.append(property, payload[property]);
+            if (!!payload[property as keyof IPadrinoPayload]) {
+                formData.append(property, JSON.stringify(payload[property as keyof IPadrinoPayload]));
+            }
         }
 
         const response = await fetch('?/submission', {
@@ -366,7 +370,6 @@
                                     : ''
                                 : ''}
                             bind:value={payload[q.id]}
-                            on:focus={() => {}}
                             on:input={() => onInput(q)}
                             on:blur={() => checkInput(q)}
                         />
@@ -377,7 +380,6 @@
                             type="number"
                             placeholder={q.placeholder ? localeString(q.placeholder, $locale) : ''}
                             bind:value={payload[q.id]}
-                            on:focus={() => {}}
                             on:input={() => onInput(q)}
                             on:blur={() => checkInput(q)}
                         />
@@ -388,7 +390,6 @@
                             type="email"
                             placeholder={q.placeholder ? localeString(q.placeholder, $locale) : ''}
                             bind:value={payload[q.id]}
-                            on:focus={() => {}}
                             on:input={() => onInput(q)}
                             on:blur={() => checkInput(q)}
                         />
@@ -399,7 +400,6 @@
                             type="text"
                             placeholder={q.placeholder ? localeString(q.placeholder, $locale) : ''}
                             bind:value={payload[q.id]}
-                            on:focus={() => {}}
                             on:input={() => onInput(q)}
                             on:blur={() => checkInput(q)}
                         />

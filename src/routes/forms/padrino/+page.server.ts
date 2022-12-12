@@ -27,15 +27,15 @@ export async function load({ }) {
 export const actions = {
     submission: async ({ request }) => {
         try {
-            const data = await request.formData();
+            const data: FormData = await request.formData();
     
             const submission: IPadrinoPayload = {
-                email: null,
-                surname: null,
-                name: null,
-                residence: null,
-                phone: null,
-                treeName: null,
+                email: '',
+                surname: '',
+                name: '',
+                residence: '',
+                phone: '',
+                treeName: '',
                 treeId: null,
                 color: '',
                 adoptionDate: null,
@@ -61,6 +61,7 @@ export const actions = {
                     <h5>Phone: ${submission.phone ? submission.phone : 'No phone number given..'}</h5>
                     <h5>Adoption date: ${submission.adoptionDate}</h5>
                     <h5>Tree ID: ${submission.treeId}</h5>
+                    <h5>Color for map marker: ${submission.color}</h5>
                     <h5>Tree name: ${submission.treeName}</h5>
                     <h5>Donage or Pick?: ${submission.donate}</h5>
                     <h5>Form submitted in ${submission.lang === 'en' ? 'English' : 'Spanish'} language</h5>
@@ -70,11 +71,9 @@ export const actions = {
             const replyEmailHTML = [
                 `
                     <h3>Thank you for participating in the El Padrino@ project with El Refugio EcoArt.</h3>
-                    <br />
                     <h5>We are so pleased that you are helping support the project and protecting the trees in the Refugio.</h5>
                     <br />
                     <h5>Your tree adoption is nearly ready but please do make the €45 adoption fee payment in the next 5 days to the following account details:</h5>
-                    <br />
                     <h5>Account Name: Dolores Abad Lorente</h5>
                     <h5>IBAN/BIC  ES56 2100 4498 1601 0012 1743 / CAIXESBBXXX</h5>
                     <br />
@@ -85,11 +84,9 @@ export const actions = {
                 `,
                 `
                     <h3>Gracias por participar en el proyecto El Padrino@ con El Refugio EcoArt.</h3>
-                    <br />
                     <h5>Estamos muy contentos de que esté ayudando a apoyar el proyecto y protegiendo los árboles en el Refugio.</h5>
                     <br />
                     <h5>La adopción de su árbol está casi lista, pero realice el pago de la tarifa de adopción de 45 € en los próximos 5 días a los siguientes detalles de la cuenta:</h5>
-                    <br />
                     <h5>Nombre de la cuenta: Dolores Abad Lorente</h5>
                     <h5>IBAN/BIC. ES56 2100 4498 1601 0012 1743 / CAIXESBBXXX</h5>
                     <br />

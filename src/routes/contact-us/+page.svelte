@@ -9,6 +9,7 @@
         IPageData,
         IMessage,
     } from '$lib/ts-interfaces';
+
     interface IData extends IPageData {
         form: {
             heroImage: IMainImage;
@@ -35,11 +36,7 @@
     import { localeString } from '$lib/helpers';
     import { appMessages, loading, locale } from '$lib/stores';
     import { goto } from '$app/navigation';
-    import AImage from '$lib/components/AImage.svelte';
     import AInput from '$lib/components/AInput.svelte';
-    import { onMount } from 'svelte';
-
-    // components
 
     // data
     $: formOK =
@@ -51,6 +48,7 @@
         !errors.name &&
         payload.subject &&
         !errors.subject;
+
     $: validationRequired = data?.form?.validations?.required
         ? localeString(data.form.validations.required, $locale)
         : 'Please fill this out';
@@ -158,10 +156,6 @@
             appMessages.update((a: IMessage[]) => [...a, errorMsg]);
         }
     };
-
-    onMount(() => {
-        console.log('data :>> ', data);
-    });
 </script>
 
 <svelte:head>
@@ -202,7 +196,6 @@
                                 type="text"
                                 placeholder={q.placeholder ? localeString(q.placeholder, $locale) : ''}
                                 bind:value={payload[q.id]}
-                                on:focus={() => {}}
                                 on:input={() => onInput(q)}
                                 on:blur={() => checkInput(q)}
                             />
@@ -213,7 +206,6 @@
                                 type="email"
                                 placeholder={q.placeholder ? localeString(q.placeholder, $locale) : ''}
                                 bind:value={payload[q.id]}
-                                on:focus={() => {}}
                                 on:input={() => onInput(q)}
                                 on:blur={() => checkInput(q)}
                             />
@@ -224,7 +216,6 @@
                                 rows="3"
                                 placeholder={q.placeholder ? localeString(q.placeholder, $locale) : ''}
                                 bind:value={payload[q.id]}
-                                on:focus={() => {}}
                                 on:input={() => onInput(q)}
                                 on:blur={() => checkInput(q)}
                             />

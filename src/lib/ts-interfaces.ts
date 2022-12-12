@@ -66,12 +66,12 @@ export interface IContactErrors {
 }
 
 export interface IPadrinoPayload {
-    email: string | null;
-    surname: string | null;
-    name: string | null;
-    residence: string | null;
-    phone?: string | null;
-    treeName: string | null;
+    email: string;
+    surname: string;
+    name: string;
+    residence: string;
+    phone?: string;
+    treeName: string;
     treeId: number | null;
     color: string;
     adoptionDate: Date | null;
