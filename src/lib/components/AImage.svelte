@@ -32,6 +32,7 @@
 
 <style lang="scss">
     img {
+        object-fit: cover;
         max-width: 100%;
         height: auto;
         transition: opacity 0.15s;
@@ -57,14 +58,12 @@
     .fullscreen {
         height: 100%;
         width: 100%;
-        object-fit: cover;
     }
 
     .project {
         width: 100%;
         min-width: 100%;
         height: auto;
-        object-fit: cover;
         max-height: 280px;
         max-width: unset;
 
@@ -76,7 +75,6 @@
     .form-hero {
         height: 100px;
         width: 100%;
-        object-fit: cover;
         border-radius: 8px;
 
         @media (min-width: 600px) {
