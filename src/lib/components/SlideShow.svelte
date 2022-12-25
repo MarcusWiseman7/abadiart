@@ -61,12 +61,7 @@
         {#each images as image, index}
             {#if image.asset}
                 <div class={`slide-show__slide ${index === activeSlide ? 'slide-show__slide--active' : ''}`}>
-                    <AImage
-                        image={image.asset || image.image}
-                        alt={image.alt || 'art'}
-                        {height}
-                        addClass="fullscreen"
-                    />
+                    <AImage {image} {height} loading={index == 0 ? 'eager' : 'lazy'} addClass="fullscreen" />
                 </div>
             {/if}
         {/each}

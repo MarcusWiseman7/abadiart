@@ -24,6 +24,4 @@
     {/if}
 </svelte:head>
 
-{#if data?.title}
-    {localeString(data.title, $locale)}
-{/if}
+<div class="page" />

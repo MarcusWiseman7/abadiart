@@ -2,9 +2,6 @@
     // helpers
     import { page } from '$app/stores';
     $: pathname = $page.url.pathname;
-
-    // components
-    import Languages from './Languages.svelte';
 </script>
 
 <header>
@@ -13,8 +10,6 @@
             <span>Abadi Art</span>
         {/if}
     </h1>
-
-    <Languages mobile={false} />
 </header>
 
 <style lang="scss">

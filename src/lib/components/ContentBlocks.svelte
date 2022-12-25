@@ -16,29 +16,22 @@
             {#if block.style && block.children}
                 <!-- heading or paragraph -->
                 {#each block.children as child}
-                    {#if block.markDefs?.length && block.markDefs?.find((m) => m._type === 'link') && child.marks?.includes(block.markDefs.find((m) => m._type === 'link')?._key)}
-                        <a class="anchor" href={block.markDefs.find((m) => m._type === 'link').href}>
-                            {child.text}
-                        </a>
-                    {:else}
-                        <svelte:element
-                            this={child.marks.includes('strong')
-                                ? 'strong'
-                                : block.style === 'normal'
-                                ? 'span'
-                                : block.style}
-                            class={block.style + ' ' + child.marks.map((m) => m)}
-                        >
-                            {@html child.text}
-                        </svelte:element>
-                    {/if}
+                    <svelte:element
+                        this={child.marks.includes('strong')
+                            ? 'strong'
+                            : block.style === 'normal'
+                            ? 'span'
+                            : block.style}
+                        class={block.style + ' ' + child.marks.map((m) => m)}
+                    >
+                        {@html child.text}
+                    </svelte:element>
                 {/each}
             {:else if block._type === 'mainImage' && block.asset}
                 <!-- image -->
                 <div class="image-wrapper">
                     <AImage
-                        image={block.asset}
-                        alt={block.alt || 'image'}
+                        image={block}
                         width={450}
                         addClass={`photo content-image ${modifiers.includes('project') ? 'project' : ''}`}
                     />

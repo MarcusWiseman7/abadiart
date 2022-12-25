@@ -10,13 +10,12 @@ export interface IPageData extends SanityDocument {
     description?: string;
 }
 
-export interface IContentBlock {
+export interface IContentBlock extends SanityImageAssetDocument {
     _type: string;
     _key: string;
     style: string;
     children?: { _key: string; _type: string; text?: string; marks: string[], markDefs?: []; }[];
     markDefs?: { _key: string; _type: string; href?: string; }[],
-    asset?: SanityImageAssetDocument;
     alt?: string;
     caption?: string;
     keepOriginalSize?: boolean;

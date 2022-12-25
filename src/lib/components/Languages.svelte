@@ -1,7 +1,4 @@
 <script lang="ts">
-    // props
-    export let mobile = true;
-
     // helpers
     import { locale } from '$lib/stores';
 
@@ -10,7 +7,7 @@
     import gbFlag from '$lib/assets/icons/gb.svg';
 </script>
 
-<div class={`languages ${mobile ? 'languages--mobile' : ''}`}>
+<div class="languages">
     <div class={'language' + ($locale === 'es' ? ' language--active' : '')} on:click={() => locale.set('es')}>
         <img src={esFlag} alt="Spain flag" />
     </div>
@@ -21,21 +18,8 @@
 
 <style lang="scss">
     .languages {
-        display: none;
-
-        @media (min-width: 600px) {
-            display: flex;
-            gap: 12px;
-        }
-
-        &--mobile {
-            display: flex;
-            gap: 12px;
-
-            @media (min-width: 600px) {
-                display: none;
-            }
-        }
+        display: flex;
+        gap: 12px;
 
         .language {
             cursor: pointer;

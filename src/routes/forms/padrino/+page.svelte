@@ -283,12 +283,7 @@
     <!-- form image -- mandarins -->
     <section class="hero">
         {#if data?.form?.heroImage}
-            <AImage
-                width={880}
-                addClass="form-hero"
-                image={data.form.heroImage}
-                alt={data.form.heroImage.alt || 'Mandarins'}
-            />
+            <AImage width={880} addClass="form-hero" image={data.form.heroImage} loading="eager" />
         {/if}
     </section>
 
@@ -327,12 +322,7 @@
                                         image._key === '4830b9654cb4' ? 'form__info__image--logo' : ''
                                     }`}
                                 >
-                                    <AImage
-                                        addClass="fullscreen"
-                                        width={imageWidth}
-                                        {image}
-                                        alt={image.alt || 'question image'}
-                                    />
+                                    <AImage addClass="fullscreen" width={imageWidth} {image} />
                                 </div>
                             {/each}
                         </div>
@@ -416,12 +406,7 @@
                         <div class="form__question__images">
                             {#each q.images as image}
                                 <div class="form__question__image">
-                                    <AImage
-                                        addClass="fullscreen"
-                                        width={imageWidth}
-                                        {image}
-                                        alt={image.alt || 'question image'}
-                                    />
+                                    <AImage addClass="fullscreen" width={imageWidth} {image} />
                                 </div>
                             {/each}
                         </div>
