@@ -5,6 +5,7 @@ export interface ILocaleString {
     es: string;
     _type?: string;
 }
+
 export interface IPageData extends SanityDocument {
     title?: ILocaleString;
     description?: string;
@@ -20,6 +21,7 @@ export interface IContentBlock extends SanityImageAssetDocument {
     caption?: string;
     keepOriginalSize?: boolean;
 }
+
 export interface IContent {
     en?: IContentBlock[];
     es?: IContentBlock[];
@@ -88,6 +90,7 @@ export interface IPadrinoErrors {
     treeId: string;
     adoptionDate: string;
 }
+
 export interface IPadrinoQuestion {
     what?: string;
     highlightedTitle?: boolean;
