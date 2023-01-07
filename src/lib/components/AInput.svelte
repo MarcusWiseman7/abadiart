@@ -1,6 +1,4 @@
 <script lang="ts">
-    // types
-
     // props
     export let label = '';
     export let error: string | null = null;
@@ -8,8 +6,6 @@
 
     // components
     import errorIcon from '$lib/assets/icons/error.svg';
-
-    // methods
 </script>
 
 <div class={`input__wrapper ${error ? 'input__wrapper--error' : ''}`}>

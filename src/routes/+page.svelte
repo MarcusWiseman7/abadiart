@@ -36,12 +36,9 @@
 </script>
 
 <svelte:head>
-    {#if data?.title}
-        <title>{localeString(data.title, $locale)}</title>
-        <meta property="og:title" content={localeString(data.title, $locale)} />
-    {/if}
-
-    <meta property="og:url" content="https://abadiart.org" />
+    <title>AbadiArt</title>
+    <meta property="og:title" content="AbadiArt" />
+    <meta property="og:url" content="https://abadiart.org/" />
 
     {#if data?.description && typeof data.description === 'string'}
         <meta name="description" content={data.description} />

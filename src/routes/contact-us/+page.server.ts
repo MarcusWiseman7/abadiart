@@ -26,7 +26,6 @@ export const actions = {
     submission: async ({ request }) => {
         try {
             const data = await request.formData();
-    
             const submission: IContactPayload = {
                 email: '',
                 name: '',
