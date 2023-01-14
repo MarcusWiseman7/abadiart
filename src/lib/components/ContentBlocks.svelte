@@ -171,11 +171,11 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                margin: 8px;
-                width: 300px;
+                width: 100%;
 
                 @media (min-width: 600px) {
                     margin: 14px;
+                    width: 300px;
                 }
             }
         }
