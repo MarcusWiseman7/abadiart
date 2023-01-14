@@ -9,6 +9,7 @@
     import { goto } from '$app/navigation';
     import { fly } from 'svelte/transition';
     import { linear } from 'svelte/easing';
+    import Languages from './Languages.svelte';
 
     // data
     $: pathname = $page.url.pathname;
@@ -44,6 +45,10 @@
                             </li>
                         {/each}
                     {/if}
+
+                    <li on:click|stopPropagation>
+                        <Languages />
+                    </li>
                 </ul>
             </nav>
         </div>

@@ -72,6 +72,13 @@
         }
     }
 
+    .project-summary {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        max-height: 280px;
+    }
+
     .form-hero {
         height: 100px;
         width: 100%;

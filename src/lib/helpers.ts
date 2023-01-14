@@ -1,7 +1,28 @@
-import type { IContent } from './ts-interfaces';
+import type { IContent, ILocaleString } from './ts-interfaces';
 
 export const localeString = (obj: { en?: string, es?: string; }, locale: string): string => {
     return obj[locale as keyof object] || obj.en;
+};
+
+export const parseContentToText = (content: IContent): ILocaleString => {
+    const contentCopy: IContent = JSON.parse(JSON.stringify(content));
+    const newLocaleString: ILocaleString = { en: '', es: '' };
+    
+    for (const key in contentCopy) {
+        const arr = contentCopy[key as keyof IContent];
+        
+        if (['en', 'es'].includes(key) && typeof arr === 'object') {
+            for (const block of arr) {
+                if (block._type === 'block' && block.children?.length) {
+                    for (const child of block.children) {
+                        newLocaleString[key as keyof ILocaleString] += child.text;
+                    }
+                }
+            }
+        }
+    }
+
+    return newLocaleString;
 };
 
 export const getDesktopIContent = (baseVersion: IContent): IContent => {

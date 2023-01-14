@@ -31,7 +31,8 @@ export interface IContent {
 export interface IProject {
     title: ILocaleString;
     description: IContent;
-    desktopDescription: IContent;
+    summary?: IContent;
+    _key: string;
 }
 
 export interface IMessage {

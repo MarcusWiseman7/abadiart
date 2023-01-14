@@ -30,11 +30,7 @@
             {:else if block._type === 'mainImage' && block.asset}
                 <!-- image -->
                 <div class="image-wrapper">
-                    <AImage
-                        image={block}
-                        width={450}
-                        addClass={`photo content-image ${modifiers.includes('project') ? 'project' : ''}`}
-                    />
+                    <AImage image={block} width={450} addClass={`photo content-image ${modifiers.join(' ')}`} />
                     {#if block.caption}
                         <span class="caption">{block.caption}</span>
                     {/if}
@@ -150,6 +146,7 @@
 
         &--project {
             white-space: pre-wrap;
+
             .image-wrapper {
                 display: flex;
                 flex-direction: column;
@@ -163,6 +160,22 @@
                     float: unset;
                     margin: 0;
                     padding: 14px 0;
+                }
+            }
+        }
+
+        &--project-summary {
+            white-space: pre-wrap;
+
+            .image-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 8px;
+                width: 300px;
+
+                @media (min-width: 600px) {
+                    margin: 14px;
                 }
             }
         }
