@@ -1,36 +1,33 @@
 <script lang="ts">
-    // helpers
-    import { goto } from '$app/navigation';
     import { logoImage, nav, locale } from '$lib/stores';
     import { localeString } from '$lib/helpers';
-
-    // components
     import AImage from '$lib/components/AImage.svelte';
     import Languages from './Languages.svelte';
     import fbLogo from '$lib/assets/images/facebook.png';
 
-    // data
     const fbLink = import.meta.env.VITE_FB_LINK;
 </script>
 
 <footer>
     <div class="content">
         <a href="/" class="logo">
-            {#if $logoImage?.image}
-                <AImage image={$logoImage.image} height={120} width={120} addClass="round" />
+            {#if $logoImage}
+                <AImage image={$logoImage} height={120} width={120} addClass="round" />
             {/if}
         </a>
 
         <nav>
-            <ul>
-                {#if $nav?.length}
+            {#if $nav?.length}
+                <ul>
                     {#each $nav as link}
-                        <li on:click={() => goto(link.href)}>
-                            {localeString(link.name, $locale)}
+                        <li>
+                            <a href={link.href}>
+                                {localeString(link.name, $locale)}
+                            </a>
                         </li>
                     {/each}
-                {/if}
-            </ul>
+                </ul>
+            {/if}
         </nav>
 
         <div class="actions">

@@ -1,14 +1,9 @@
-import type { SanityDocument, SanityImageAssetDocument } from '@sanity/client';
+import type { SanityImageAssetDocument } from '@sanity/client';
 
 export interface ILocaleString {
     en: string;
     es: string;
     _type?: string;
-}
-
-export interface IPageData extends SanityDocument {
-    title?: ILocaleString;
-    description?: string;
 }
 
 export interface IContentBlock extends SanityImageAssetDocument {

@@ -1,60 +1,42 @@
 <script lang="ts">
-    // types
-    import type { IPageData, IContent } from '$lib/ts-interfaces';
+    import type { IPageData } from '$lib/types/pageData';
+    import type { IContent } from '$lib/ts-interfaces';
+    import BrushStroke from '$lib/components/BrushStroke.svelte';
+    import ContentBlocks from '$lib/components/ContentBlocks.svelte';
+    import { localeString } from '$lib/helpers';
+    import { device, locale } from '$lib/stores';
+    import AHead from '$lib/components/AHead.svelte';
+
     interface IData extends IPageData {
         aboutUs: IContent;
         desktopAboutUs: IContent;
     }
 
-    /** @type {import('./$types').PageData} */
     export let data: IData;
+    const { title, description, aboutUs, desktopAboutUs } = data;
 
-    // components
-    import BrushStroke from '$lib/components/BrushStroke.svelte';
-    import ContentBlocks from '$lib/components/ContentBlocks.svelte';
+    // let mobile = true;
+    $: aboutUsDeviceKey = $device === 'desktop' ? desktopAboutUs : aboutUs;
+    $: aboutUsContent = aboutUsDeviceKey[$locale as keyof IContent];
 
-    // helpers
-    import { onMount } from 'svelte';
-    import { localeString } from '$lib/helpers';
-    import { locale } from '$lib/stores';
+    // const setMobile = (): void => {
+    //     mobile = window.innerWidth < 600;
+    // };
 
-    // data
-    let mobile = true;
-    $: aboutUsDeviceKey = mobile ? 'aboutUs' : 'desktopAboutUs';
-    $: aboutUsContent = data && data[aboutUsDeviceKey] && data[aboutUsDeviceKey][$locale as keyof IContent];
-
-    // methods
-    const setMobile = (): void => {
-        mobile = window.innerWidth < 600;
-    };
-
-    onMount(setMobile);
+    // onMount(setMobile);
 </script>
 
-<svelte:head>
-    {#if data?.title}
-        <title>{localeString(data.title, $locale)}</title>
-        <meta property="og:title" content={localeString(data.title, $locale)} />
-    {/if}
+<AHead {title} {description} canonical="https://abadiart.org/about" />
 
-    <meta property="og:url" content="https://abadiart.org/about" />
+<!-- <svelte:window on:resize={setMobile} /> -->
 
-    {#if data?.description}
-        <meta name="description" content={data.description} />
-        <meta property="og:description" content={data.description} />
-    {/if}
-</svelte:head>
-
-<svelte:window on:resize={setMobile} />
-
-{#if data?.title}
+{#if title}
     <BrushStroke>
-        {localeString(data.title, $locale)}
+        {localeString(title, $locale)}
     </BrushStroke>
 {/if}
 
 <div class="page">
-    <!-- content -->
     {#if aboutUsContent}
         <ContentBlocks contentBlocks={aboutUsContent} />
     {/if}

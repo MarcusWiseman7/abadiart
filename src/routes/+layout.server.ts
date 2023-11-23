@@ -1,12 +1,16 @@
 import sanity from '$lib/sanity';
+import type { LayoutServerLoad } from './$types';
+import device from 'device';
 
-/** @type {import('./$types').LayoutServerLoad} */
-export async function load({ request }) {
+export const load: LayoutServerLoad = async ({ request }) => {
     const siteAcceptedLanguages = ['en', 'es'];
     const parsedHeaderLanguages: { locale: string; q: number }[] = [];
-    const headerAcceptedLangs: string = request.headers.get('accept-language');
+    const headerAcceptedLangs: string | null = request.headers.get('accept-language');
+
+    const ua = request.headers.get('User-Agent');
+    const userDevice = device(ua).type;
     
-    headerAcceptedLangs.split(',').forEach(x => {
+    headerAcceptedLangs?.split(',').forEach(x => {
         const sub = x.split(';');
         const locale = sub[0].slice(0, 2);
         if (siteAcceptedLanguages.includes(locale)) {
@@ -24,11 +28,11 @@ export async function load({ request }) {
 
     // fetch nav from sanity
     const navQuery = `*[_type == 'nav'] {navList}[0]`;
-    const navObject = await sanity.fetch(navQuery);
+    const { navList } = await sanity.fetch(navQuery);
 
     // fetch logo from sanity
     const logoQuery = `*[_type == 'logo'][0]`;
-    const logoImageObj = await sanity.fetch(logoQuery);
+    const { image } = await sanity.fetch(logoQuery);
 
-    return { logoImageObj, navObject, i18n };
+    return { data: JSON.stringify({ logo: image, navList, i18n, userDevice }) };
 }

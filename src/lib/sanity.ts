@@ -1,6 +1,6 @@
-import sanityClient from '@sanity/client';
+import { createClient } from '@sanity/client';
 
-const sanity = sanityClient({
+const sanity = createClient({
     projectId: import.meta.env.VITE_SANITY_ID,
     dataset: 'production',
     apiVersion: '2021-10-21',

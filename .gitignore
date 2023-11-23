@@ -6,4 +6,5 @@ node_modules
 .env
 .env.*
 !.env.example
-.prettierrc
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

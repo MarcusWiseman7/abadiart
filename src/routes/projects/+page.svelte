@@ -1,6 +1,11 @@
 <script lang="ts">
-    // types
-    import type { IContent, ILocaleString, IPageData, IProject } from '$lib/ts-interfaces';
+    import { localeString } from '$lib/helpers';
+    import { locale } from '$lib/stores';
+    import ContentBlocks from '$lib/components/ContentBlocks.svelte';
+    import type { IContent, ILocaleString, IProject } from '$lib/ts-interfaces';
+    import type { IPageData } from '$lib/types/pageData';
+    import AHead from '$lib/components/AHead.svelte';
+
     interface IData extends IPageData {
         projects: IProject[];
         misc: {
@@ -9,21 +14,12 @@
         }[];
     }
 
-    /** @type {import('./$types').PageData} */
     export let data: IData;
+    const { title, description, misc, projects } = data;
 
-    // helpers
-    import { localeString } from '$lib/helpers';
-    import { locale } from '$lib/stores';
-    import { goto } from '$app/navigation';
-
-    // components
-    import ContentBlocks from '$lib/components/ContentBlocks.svelte';
-
-    // data
-    $: buttonText = data?.misc?.find((t) => t.name === 'buttonText');
+    $: buttonText = misc?.find((t) => t.name === 'buttonText');
     $: summaries =
-        data?.projects
+        projects
             ?.map(
                 (p) =>
                     p.summary && {
@@ -35,25 +31,13 @@
             ?.filter((s) => s?.id && s.title && s?.summary && typeof s.summary === 'object') || [];
 </script>
 
-<svelte:head>
-    {#if data?.title}
-        <title>{localeString(data.title, $locale)}</title>
-        <meta property="og:title" content={localeString(data.title, $locale)} />
-    {/if}
-
-    <meta property="og:url" content="https://abadiart.org/projects" />
-
-    {#if data?.description}
-        <meta name="description" content={data.description} />
-        <meta property="og:description" content={data.description} />
-    {/if}
-</svelte:head>
+<AHead {title} {description} canonical="https://abadiart.org/projects" />
 
 <div class="page">
     <div class="summaries">
         {#each summaries as s}
             {#if s?.id && s.title && s.summary && typeof s.summary === 'object'}
-                <div class="summary" on:click={() => goto(`/projects/${s?.id}`)}>
+                <a class="summary" href={`/projects/${s?.id}`}>
                     <h2 class="summary__title">{s.title}</h2>
                     <ContentBlocks modifiers={['project-summary']} contentBlocks={s.summary} />
                     <div class="summary__btn">
@@ -63,7 +47,7 @@
                                 : 'Go to project'}
                         </button>
                     </div>
-                </div>
+                </a>
             {/if}
         {/each}
     </div>

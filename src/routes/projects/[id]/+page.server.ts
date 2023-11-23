@@ -1,13 +1,13 @@
+import sanity from '$lib/sanity';
+import { parseContentToText } from '$lib/helpers';
 import type { IProject } from '$lib/ts-interfaces';
+import type { PageServerLoad } from './$types';
+
 interface IData {
     project: IProject;
 }
 
-import sanity from '$lib/sanity';
-import { parseContentToText } from '$lib/helpers';
-
-/** @type {import('./$types').PageServerLoad} */
-export async function load({ params }) {
+export const load: PageServerLoad = async ({ params }) => {
     const { id } = params;
 
     const query = `*[_type == "projects"][0] {
@@ -19,5 +19,5 @@ export async function load({ params }) {
     const res: IData = await sanity.fetch(query);
     const description = res.project?.summary ? parseContentToText(res.project.summary) : '';
     
-    return { id, project: res.project, description };
+    return { data: JSON.stringify({ id, project: res.project, description }) };
 }

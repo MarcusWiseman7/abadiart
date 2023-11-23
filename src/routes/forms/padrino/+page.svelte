@@ -1,14 +1,21 @@
 <script lang="ts">
-    // types
+    import { goto } from '$app/navigation';
+    import { localeString } from '$lib/helpers';
+    import { loading, locale, appMessages } from '$lib/stores';
+    import { onMount } from 'svelte';
+    import AInput from '$lib/components/AInput.svelte';
+    import AImage from '$lib/components/AImage.svelte';
+    import AHead from '$lib/components/AHead.svelte';
+    import type { IPageData } from '$lib/types/pageData';
     import type {
         ILocaleString,
         IMainImage,
         IPadrinoErrors,
         IPadrinoPayload,
         IPadrinoQuestion,
-        IPageData,
         IMessage,
     } from '$lib/ts-interfaces';
+    import type { ActionResult } from '@sveltejs/kit';
 
     interface IData extends IPageData {
         form: {
@@ -39,24 +46,12 @@
         };
     }
 
-    /** @type {import('./$types').PageData} */
     export let data: IData;
+    const { title, description, form } = data;
 
-    // helpers
-    import { goto } from '$app/navigation';
-    import { localeString } from '$lib/helpers';
-    import { loading, locale, appMessages } from '$lib/stores';
-    import { onMount } from 'svelte';
-
-    // components
-    import AInput from '$lib/components/AInput.svelte';
-    import AImage from '$lib/components/AImage.svelte';
-
-    // data
     let step = 0;
     let imageWidth = 0;
-
-    $: formStep = data?.form?.formSteps && data.form.formSteps[step];
+    $: formStep = form?.formSteps && form.formSteps[step];
     $: stepQuestions = formStep?.formStepBlocks;
     $: formOK = [
         payload.email &&
@@ -77,17 +72,17 @@
         true,
     ][step];
 
-    $: validationRequired = data?.form?.validations?.required
-        ? localeString(data.form.validations.required, $locale)
+    $: validationRequired = form?.validations?.required
+        ? localeString(form.validations.required, $locale)
         : 'Please fill this out';
-    $: validationEmail = data?.form?.validations?.validEmail
-        ? localeString(data.form.validations.validEmail, $locale)
+    $: validationEmail = form?.validations?.validEmail
+        ? localeString(form.validations.validEmail, $locale)
         : 'Please enter a valid email';
-    $: validationAvailableTreeId = data?.form?.validations?.availableTreeId
-        ? localeString(data.form.validations.availableTreeId, $locale)
+    $: validationAvailableTreeId = form?.validations?.availableTreeId
+        ? localeString(form.validations.availableTreeId, $locale)
         : 'Please enter an available tree ID from the map';
-    $: validationTreeIdNAN = data?.form?.validations?.treeIdNAN
-        ? localeString(data.form.validations.treeIdNAN, $locale)
+    $: validationTreeIdNAN = form?.validations?.treeIdNAN
+        ? localeString(form.validations.treeIdNAN, $locale)
         : 'Please enter a number from the map';
 
     const payload: IPadrinoPayload = {
@@ -103,7 +98,6 @@
         donate: null,
         lang: 'en',
     };
-
     const errors: IPadrinoErrors = {
         email: '',
         surname: '',
@@ -115,7 +109,6 @@
         adoptionDate: '',
     };
 
-    // methods
     const checkInput = (question: IPadrinoQuestion): void => {
         const { required, id } = question;
         const value = payload[id as keyof IPadrinoPayload];
@@ -227,8 +220,7 @@
             },
         });
 
-        /** @type {import('@sveltejs/kit').ActionResult} */
-        const result = await response.json();
+        const result: ActionResult = await response.json();
 
         loading.set(false);
 
@@ -259,19 +251,7 @@
     });
 </script>
 
-<svelte:head>
-    {#if data?.title}
-        <title>{localeString(data.title, $locale)}</title>
-        <meta property="og:title" content={localeString(data.title, $locale)} />
-    {/if}
-
-    <meta property="og:url" content="https://abadiart.org/contact" />
-
-    {#if data?.description}
-        <meta name="description" content={data.description} />
-        <meta property="og:description" content={data.description} />
-    {/if}
-</svelte:head>
+<AHead {title} {description} canonical="https://abadiart.org/forms/padrino" />
 
 <svelte:window
     on:resize={() => {
@@ -282,17 +262,17 @@
 <div class="page">
     <!-- form image -- mandarins -->
     <section class="hero">
-        {#if data?.form?.heroImage}
-            <AImage width={880} addClass="form-hero" image={data.form.heroImage} loading="eager" />
+        {#if form?.heroImage}
+            <AImage width={880} addClass="form-hero" image={form.heroImage} loading="eager" />
         {/if}
     </section>
 
     <!-- headline -->
-    {#if data?.form?.headline}
+    {#if form?.headline}
         <section class="headline">
-            <h1 class="headline__title">{localeString(data.form.headline.title, $locale)}</h1>
-            <h2 class="headline__subtitle">{localeString(data.form.headline.subtitle, $locale)}</h2>
-            <small class="headline__fine-print">{localeString(data.form.headline.finePrint, $locale)}</small>
+            <h1 class="headline__title">{localeString(form.headline.title, $locale)}</h1>
+            <h2 class="headline__subtitle">{localeString(form.headline.subtitle, $locale)}</h2>
+            <small class="headline__fine-print">{localeString(form.headline.finePrint, $locale)}</small>
         </section>
     {/if}
 
@@ -416,28 +396,28 @@
         {/each}
 
         <section class="form__nav">
-            {#if data?.form?.formButtons}
+            {#if form?.formButtons}
                 {#if step > 0}
                     <button class="form-btn" on:click={() => goPrev()}
-                        >{localeString(data.form.formButtons.back, $locale)}</button
+                        >{localeString(form.formButtons.back, $locale)}</button
                     >
                 {/if}
                 {#if step < 3}
                     <button class={`form-btn ${!formOK ? 'form-btn--disabled' : ''}`} on:click={() => goNext()}
-                        >{localeString(data.form.formButtons.next, $locale)}</button
+                        >{localeString(form.formButtons.next, $locale)}</button
                     >
                 {:else}
                     <button class="form-btn form-btn--submit" on:click={() => onSubmit()}
-                        >{localeString(data.form.formButtons.submit, $locale)}</button
+                        >{localeString(form.formButtons.submit, $locale)}</button
                     >
                 {/if}
             {/if}
         </section>
 
         <!-- payment details -->
-        {#if data?.form?.paymentDetails}
+        {#if form?.paymentDetails}
             <section class="form__payment-details">
-                {#each data.form.paymentDetails as detail}
+                {#each form.paymentDetails as detail}
                     <p>{localeString(detail, $locale)}</p>
                 {/each}
             </section>

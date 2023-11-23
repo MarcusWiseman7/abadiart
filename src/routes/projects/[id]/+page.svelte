@@ -1,6 +1,10 @@
 <script lang="ts">
-    // types
+    import { localeString } from '$lib/helpers';
+    import { locale } from '$lib/stores';
+    import ContentBlocks from '$lib/components/ContentBlocks.svelte';
     import type { IContent, ILocaleString, IProject } from '$lib/ts-interfaces';
+    import AHead from '$lib/components/AHead.svelte';
+
     interface IData {
         project: IProject;
         id: string;
@@ -8,34 +12,14 @@
         description?: ILocaleString;
     }
 
-    /** @type {import('./$types').PageData} */
     export let data: IData;
+    const { project, id, description } = data;
 
-    import { localeString } from '$lib/helpers';
-    import { locale } from '$lib/stores';
-
-    // components
-    import ContentBlocks from '$lib/components/ContentBlocks.svelte';
-
-    // data
-    $: content = data?.project?.description[$locale as keyof IContent];
+    $: content = project?.description[$locale as keyof IContent];
+    $: localeDescription = description && localeString(description, $locale);
 </script>
 
-<svelte:head>
-    {#if data?.project?.title}
-        <title>{localeString(data.project.title, $locale)}</title>
-        <meta property="og:title" content={localeString(data.project.title, $locale)} />
-    {/if}
-
-    {#if data?.id}
-        <meta property="og:url" content={`https://abadiart.org/projects/${data.id}`} />
-    {/if}
-
-    {#if data?.description}
-        <meta name="description" content={localeString(data.description, $locale)} />
-        <meta property="og:description" content={localeString(data.description, $locale)} />
-    {/if}
-</svelte:head>
+<AHead title={project?.title} description={localeDescription} canonical={`https://abadiart.org/projects/${id}`} />
 
 <div class="page">
     {#if content && typeof content === 'object'}

@@ -1,14 +1,19 @@
 <script lang="ts">
-    // types
+    import { localeString } from '$lib/helpers';
+    import { appMessages, loading, locale } from '$lib/stores';
+    import { goto } from '$app/navigation';
+    import AInput from '$lib/components/AInput.svelte';
+    import type { IPageData } from '$lib/types/pageData';
     import type {
         IContactErrors,
         IContactPayload,
         ILocaleString,
         IMainImage,
         IPadrinoQuestion,
-        IPageData,
         IMessage,
     } from '$lib/ts-interfaces';
+    import type { ActionResult } from '@sveltejs/kit';
+    import AHead from '$lib/components/AHead.svelte';
 
     interface IData extends IPageData {
         form: {
@@ -29,16 +34,9 @@
         };
     }
 
-    /** @type {import('./$types').PageData} */
     export let data: IData;
+    const { title, description, form } = data;
 
-    // helpers
-    import { localeString } from '$lib/helpers';
-    import { appMessages, loading, locale } from '$lib/stores';
-    import { goto } from '$app/navigation';
-    import AInput from '$lib/components/AInput.svelte';
-
-    // data
     $: formOK =
         payload.email &&
         !errors.email &&
@@ -49,13 +47,12 @@
         payload.subject &&
         !errors.subject;
 
-    $: validationRequired = data?.form?.validations?.required
-        ? localeString(data.form.validations.required, $locale)
+    $: validationRequired = form?.validations?.required
+        ? localeString(form.validations.required, $locale)
         : 'Please fill this out';
-    $: validationEmail = data?.form?.validations?.validEmail
-        ? localeString(data.form.validations.validEmail, $locale)
+    $: validationEmail = form?.validations?.validEmail
+        ? localeString(form.validations.validEmail, $locale)
         : 'Please enter a valid email';
-
     const payload: IContactPayload = {
         email: '',
         name: '',
@@ -63,7 +60,6 @@
         message: '',
         lang: 'en',
     };
-
     const errors: IContactErrors = {
         email: '',
         name: '',
@@ -71,7 +67,6 @@
         message: '',
     };
 
-    // methods
     const checkInput = (question: IPadrinoQuestion): void => {
         const { required, id } = question;
         const value = payload[id as keyof IContactPayload];
@@ -100,9 +95,9 @@
     };
 
     const checkAllInputs = (): void => {
-        if (!data?.form?.questions) return;
+        if (!form?.questions) return;
 
-        data.form.questions.forEach((q) => {
+        form.questions.forEach((q) => {
             if (!q.what) {
                 checkInput(q);
             }
@@ -144,8 +139,7 @@
             },
         });
 
-        /** @type {import('@sveltejs/kit').ActionResult} */
-        const result = await response.json();
+        const result: ActionResult = await response.json();
 
         loading.set(false);
 
@@ -158,31 +152,19 @@
     };
 </script>
 
-<svelte:head>
-    {#if data?.title}
-        <title>{localeString(data.title, $locale)}</title>
-        <meta property="og:title" content={localeString(data.title, $locale)} />
-    {/if}
-
-    <meta property="og:url" content="https://abadiart.org/contact" />
-
-    {#if data?.description}
-        <meta name="description" content={data.description} />
-        <meta property="og:description" content={data.description} />
-    {/if}
-</svelte:head>
+<AHead {title} {description} canonical="https://abadiart.org/work" />
 
 <div class="page">
     <section class="headline">
-        {#if data?.form?.headline}
-            <h1 class="headline__title">{@html localeString(data.form.headline.title, $locale)}</h1>
-            <h2 class="headline__subtitle">{@html localeString(data.form.headline.subtitle, $locale)}</h2>
+        {#if form?.headline}
+            <h1 class="headline__title">{@html localeString(form.headline.title, $locale)}</h1>
+            <h2 class="headline__subtitle">{@html localeString(form.headline.subtitle, $locale)}</h2>
         {/if}
     </section>
 
     <form class="form" on:submit|preventDefault>
-        {#if data?.form?.questions}
-            {#each data.form.questions as q}
+        {#if form?.questions}
+            {#each form.questions as q}
                 {#if q.hasOwnProperty('id') && !!q.id && typeof q.id === 'string'}
                     <AInput
                         required={q.required}
@@ -226,17 +208,17 @@
         {/if}
 
         <section class="form__nav">
-            {#if data?.form?.formButtons}
+            {#if form?.formButtons}
                 <button class="form-btn form-btn--submit" on:click={() => onSubmit()}
-                    >{localeString(data.form.formButtons.submit, $locale)}</button
+                    >{localeString(form.formButtons.submit, $locale)}</button
                 >
             {/if}
         </section>
     </form>
 
     <section class="form__details">
-        {#if data?.form?.details}
-            {#each data.form.details as detail}
+        {#if form?.details}
+            {#each form.details as detail}
                 <p>{localeString(detail, $locale)}</p>
             {/each}
         {/if}
@@ -244,8 +226,6 @@
 </div>
 
 <style lang="scss">
-    $color-gold: rgb(235, 194, 74);
-
     .headline {
         text-align: center;
         margin: 20px 0 40px 0;

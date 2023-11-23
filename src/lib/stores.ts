@@ -5,7 +5,8 @@ import { writable, type Writable } from 'svelte/store';
  * WRITABLE EXPORTS
  */
 export let appMessages: Writable<IMessage[]> = writable([]);
-export let locale: Writable<string> = writable('en');
+export let locale = writable('en');
 export let logoImage: Writable<IMainImage> = writable();
 export let nav: Writable<INav[]> = writable();
-export let loading = writable<boolean>(false);
+export let loading = writable(false);
+export let device = writable('');

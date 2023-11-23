@@ -1,8 +1,9 @@
 import sanity from '$lib/sanity';
+import type { PageServerLoad } from './$types';
 
-/** @type {import('./$types').PageServerLoad} */
-export async function load({ }) {
+export const load: PageServerLoad = async (_) => {
     const query = `*[_type == 'work'][0]`;
     const res = await sanity.fetch(query);
-    if (res) return res;
+    
+    return { data: JSON.stringify(res) };
 }
