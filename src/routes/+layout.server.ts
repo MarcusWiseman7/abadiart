@@ -1,14 +1,16 @@
 import sanity from '$lib/sanity';
 import type { LayoutServerLoad } from './$types';
-import device from 'device';
+import { UAParser } from 'ua-parser-js';
 
 export const load: LayoutServerLoad = async ({ request }) => {
     const siteAcceptedLanguages = ['en', 'es'];
     const parsedHeaderLanguages: { locale: string; q: number }[] = [];
     const headerAcceptedLangs: string | null = request.headers.get('accept-language');
 
-    const ua = request.headers.get('User-Agent');
-    const userDevice = device(ua).type;
+    const ua = request.headers.get('user-agent');
+    const parser = new UAParser(ua);
+    const uaResult = parser.getResult();
+    const userDevice = uaResult.device.type || 'desktop';
     
     headerAcceptedLangs?.split(',').forEach(x => {
         const sub = x.split(';');
