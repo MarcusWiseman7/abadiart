@@ -3,6 +3,7 @@
 @import 'theme';
 
 body {
+    overscroll-behavior: none;
     overflow-x: hidden;
     user-select: none;
     width: 100%;
