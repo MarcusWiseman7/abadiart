@@ -7,16 +7,18 @@
     import AHead from '$lib/components/AHead.svelte';
 
     interface IData extends IPageData {
-        images: IMainImage[];
+        mobileImages: IMainImage[];
+        desktopImages: IMainImage[];
         missionStatement: IContent;
         desktopMissionStatement: IContent;
     }
 
     export let data: IData;
-    const { images, desktopMissionStatement, missionStatement, description } = data;
+    const { mobileImages, desktopImages, desktopMissionStatement, missionStatement, description } = data;
 
     $: missionDeviceKey = $device === 'desktop' ? desktopMissionStatement : missionStatement;
     $: mission = missionDeviceKey[$locale as keyof IContent];
+    $: images = $device === 'desktop' ? desktopImages : mobileImages;
 
     // const setMobile = (): void => {
     //     mobile = window.innerWidth < 600;

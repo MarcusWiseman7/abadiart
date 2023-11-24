@@ -20,12 +20,13 @@ export const load: PageServerLoad = async (_) => {
     const query = `*[_type == 'home'][0]`;
     const res: IData = await sanity.fetch(query);
 
-    const { missionStatement, images, description } = res;
+    const { missionStatement, desktopImages, mobileImages, description } = res;
     const response: Partial<Reponse> = { missionStatement, description };
     if (missionStatement) {
         response.desktopMissionStatement = getDesktopIContent(missionStatement);
     }
-    if (images) response.images = images.images;
+    if (desktopImages) response.desktopImages = desktopImages.images;
+    if (mobileImages) response.mobileImages = mobileImages.images;
 
     return { data: JSON.stringify(response) };
 }

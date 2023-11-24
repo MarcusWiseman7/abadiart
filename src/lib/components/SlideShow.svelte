@@ -1,32 +1,23 @@
 <script lang="ts">
-    // types
     import type { IMainImage } from '$lib/ts-interfaces';
-
-    // props
-    export let images: IMainImage[];
-
-    // directives
     import { onMount } from 'svelte';
-
-    // components
     import AImage from '$lib/components/AImage.svelte';
-
-    // images
     import arrowBack from '$lib/assets/icons/arrow-back.svg';
     import arrowForward from '$lib/assets/icons/arrow-forward.svg';
 
-    // data
+    export let images: IMainImage[];
+
+    const SLIDE_INTERVAL = 12000;
     let height = 0;
     let canHave = false;
     let activeSlide = 0;
     let ss_interval: NodeJS.Timer | null = null;
 
-    // methods
     const startInterval = (): void => {
         ss_interval = setInterval(() => {
             if (activeSlide + 1 < images.length) activeSlide++;
             else activeSlide = 0;
-        }, 7000);
+        }, SLIDE_INTERVAL);
     };
     const stopInterval = (): void => {
         if (ss_interval) clearInterval(ss_interval);
@@ -85,7 +76,8 @@
         top: 0;
         left: 0;
         width: 100vw;
-        height: 100%;
+        height: 100vh;
+
         // height: calc(100vh + env(safe-area-inset-top));
         // padding-top: env(safe-area-inset-top);
 
@@ -93,13 +85,13 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
+            width: 100%;
             height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity ease-in-out 2000ms;
+            transition: opacity 3s ease-in;
 
             &--active {
                 opacity: 1;

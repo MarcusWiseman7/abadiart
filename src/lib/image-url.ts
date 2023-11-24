@@ -97,13 +97,13 @@ export default function getImageProps({
     
     return {
         // use the original image as the src for the <img>
-        src: builder.width(maxWidth).url(),
+        src: builder.width(Math.ceil(maxWidth)).url(),
 
         // build a `{URL} {SIZE}w ...` string for srcset
         srcset: retinaSizes
             .map((size) => `${builder.width(size).url()} ${size}w`)
             .join(', '),
-        sizes: userMaxWidth === '100vw' ? '100vw' : `(max-width: ${maxWidth}px) 100vw, ${maxWidth}px`,
+        sizes: userMaxWidth === '100vw' ? '100vw' : `(max-width: ${Math.ceil(maxWidth)}px) 100vw, ${Math.ceil(maxWidth)}px`,
 
         // also tell the browser the size of the image so it can calculate aspect ratios
         width: retinaSizes[0],

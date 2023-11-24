@@ -1,18 +1,13 @@
 <script lang="ts">
-    // types
     import type { SanityImageAssetDocument } from '@sanity/client';
-
-    // helpers
     import getImageProps from '$lib/image-url';
 
-    // props
     export let image: SanityImageAssetDocument;
     export let height: number = 0;
     export let width: number = 0;
     export let addClass: string = '';
     export let loading: 'lazy' | 'eager' = 'lazy';
 
-    // data
     let loaded = false;
 </script>
 
