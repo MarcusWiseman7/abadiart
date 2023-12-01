@@ -13,8 +13,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: calc(var(--vh, 1vh) * 100);
-        width: 100%;
         z-index: 99;
     }
 

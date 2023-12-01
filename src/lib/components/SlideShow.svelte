@@ -11,7 +11,7 @@
     let height = 0;
     let canHave = false;
     let activeSlide = 0;
-    let ss_interval: NodeJS.Timer | null = null;
+    let ss_interval: NodeJS.Timeout | null = null;
 
     const startInterval = (): void => {
         ss_interval = setInterval(() => {
@@ -75,8 +75,10 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 100vw;
-        height: 100vh;
+        height: 100vh !important;
+        height: 100dvh !important;
+        width: 100vw !important;
+        width: 100dvw !important;
 
         // height: calc(100vh + env(safe-area-inset-top));
         // padding-top: env(safe-area-inset-top);
@@ -85,8 +87,10 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            height: 100vh !important;
+            height: 100dvh !important;
+            width: 100vw !important;
+            width: 100dvw !important;
             display: flex;
             justify-content: center;
             align-items: center;
