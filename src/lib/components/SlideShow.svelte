@@ -7,7 +7,7 @@
 
     export let images: IMainImage[];
 
-    const SLIDE_INTERVAL = 12000;
+    const SLIDE_INTERVAL = 8000;
     let height = 0;
     let canHave = false;
     let activeSlide = 0;
