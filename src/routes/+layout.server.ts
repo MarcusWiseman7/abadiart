@@ -28,7 +28,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
 
     const i18n = parsedHeaderLanguages[0]?.locale || 'en';
 
-    // fetch nav from sanity!
+    // fetch nav from sanity
     const navQuery = `*[_type == 'nav'] {navList}[0]`;
     const { navList } = await sanity.fetch(navQuery);
 
