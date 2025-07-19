@@ -22,7 +22,8 @@
         projects
             ?.map(
                 (p) =>
-                    p.summary && {
+                    p.summary &&
+                    p.title && {
                         summary: p.summary[$locale as keyof IContent],
                         id: p._key,
                         title: p.title[$locale as keyof IContent],
